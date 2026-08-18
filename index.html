@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#100D0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>أسطول الدفاع المدني — قطر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@700;900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#100D0B; --panel:#1B1613; --panel2:#241D18; --line:#3A2E26;
+  --red:#D8232A; --red-dk:#8E1116; --amber:#FFC000; --hivis:#FFE14D;
+  --text:#F2EBE3; --muted:#A8988B;
+  --display:"Noto Kufi Arabic","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --r:14px;
+  --chevron:repeating-linear-gradient(115deg,var(--red) 0 20px,#0d0b0a 20px 22px,var(--amber) 22px 42px,#0d0b0a 42px 44px);
+  --shutter:repeating-linear-gradient(180deg,rgba(255,255,255,.07) 0 3px,rgba(0,0,0,.30) 3px 7px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink); color:var(--text); font-family:var(--body);
+  font-size:15px; line-height:1.65; overflow-x:hidden;
+  background-image:radial-gradient(120% 60% at 50% 0%,#1d1714 0%,var(--ink) 60%);
+  min-height:100dvh;
+}
+button,input,textarea,select{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.shell{max-width:760px;margin:0 auto;padding:0 16px 120px}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:60;background:rgba(16,13,11,.86);backdrop-filter:blur(14px)}
+.top .band{height:6px;background:var(--chevron)}
+.topin{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.mark{width:34px;height:34px;flex:none}
+.brand b{font-family:var(--display);font-weight:900;font-size:14.5px;letter-spacing:-.2px;display:block;line-height:1.25}
+.brand span{display:block;font-size:10.5px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+.tbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel);
+  display:grid;place-items:center;flex:none;transition:.16s}
+.tbtn:active{transform:scale(.93)}
+.tbtn.on{background:var(--amber);color:#1a1206;border-color:var(--amber)}
+.tbtn svg{width:18px;height:18px}
+.lang{font-family:var(--mono);font-size:12px;font-weight:600;width:auto;padding:0 11px}
+
+/* ---------- headings ---------- */
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--amber);
+  text-transform:uppercase;display:flex;align-items:center;gap:8px;margin:26px 0 8px}
+.eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+h1{font-family:var(--display);font-weight:900;font-size:26px;line-height:1.25;margin:0 0 6px;letter-spacing:-.4px}
+h2{font-family:var(--display);font-weight:700;font-size:17px;margin:0 0 8px}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 18px}
+
+/* ---------- fleet cards ---------- */
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin-bottom:12px;position:relative;transition:.18s}
+.card:active{transform:scale(.988)}
+.card .hd{display:flex;align-items:center;gap:12px;padding:13px 14px 6px}
+.card .hd .txt{flex:1;min-width:0}
+.card .hd h3{margin:0;font-family:var(--display);font-weight:700;font-size:16px}
+.card .hd p{margin:2px 0 0;font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+.count{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);
+  border-radius:999px;padding:3px 9px;white-space:nowrap}
+.thumbwrap{padding:0 8px 10px}
+
+/* ---------- truck elevation (signature) ---------- */
+.elev{width:100%;height:auto;display:block;direction:ltr}
+.elev .bay{cursor:pointer}
+.elev .cavity{fill:#0b0908}
+.elev .shutter{fill:#9aa3a8;transform-origin:center top;transition:transform .32s cubic-bezier(.3,.9,.3,1),opacity .3s}
+.elev .bay.open .shutter{transform:scaleY(.1)}
+.elev .baylbl{font-family:var(--mono);font-size:13px;font-weight:600;fill:#0b0908;pointer-events:none}
+.elev .bay.open .baylbl{fill:var(--hivis)}
+.elev .frame{fill:none;stroke:#0b0908;stroke-width:2}
+.elev .bay.open .frame{stroke:var(--amber);stroke-width:2.5}
+.elev .cablbl{font-family:var(--mono);font-size:11px;fill:#e9e2da;opacity:.85;pointer-events:none}
+
+/* ---------- specs ---------- */
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:14px 0 4px}
+.spec{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
+.spec b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;font-weight:500}
+.spec i{font-style:normal;font-size:14px;font-weight:600}
+
+/* ---------- compartment accordion ---------- */
+.comp{border:1px solid var(--line);border-radius:12px;margin-bottom:9px;background:var(--panel);overflow:hidden}
+.comp.active{border-color:var(--amber)}
+.comp>.ch{display:flex;align-items:center;gap:11px;width:100%;padding:12px 13px;text-align:start}
+.tag{width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:600;font-size:13px;background:#0e0c0a;border:1px solid var(--line);color:var(--amber)}
+.comp.active .tag{background:var(--amber);color:#1a1206;border-color:var(--amber)}
+.comp .ch .t{flex:1;min-width:0}
+.comp .ch .t b{display:block;font-weight:600;font-size:14.5px}
+.comp .ch .t span{display:block;font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+.chev{width:16px;height:16px;color:var(--muted);transition:transform .2s}
+.comp.active .chev{transform:rotate(-90deg);color:var(--amber)}
+html[dir="rtl"] .chev{transform:scaleX(-1)}
+html[dir="rtl"] .comp.active .chev{transform:scaleX(-1) rotate(90deg)}
+.body{display:none;padding:0 10px 10px;animation:fade .22s ease}
+.comp.active .body{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+/* ---------- equipment rows ---------- */
+.item{display:flex;align-items:center;gap:11px;width:100%;padding:10px 11px;text-align:start;
+  border-radius:10px;background:var(--panel2);border:1px solid transparent;margin-bottom:6px;transition:.15s}
+.item:active{transform:scale(.99);border-color:var(--line)}
+.qty{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--amber)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex:none;box-shadow:0 0 0 3px rgba(216,35,42,.16)}
+.item .t{flex:1;min-width:0}
+.item .t b{display:block;font-weight:600;font-size:14px}
+.item .t span{display:block;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.empty{border:1px dashed var(--line);border-radius:11px;padding:16px;text-align:center;color:var(--muted);font-size:13px}
+.empty b{display:block;color:var(--text);font-weight:600;margin-bottom:3px;font-size:14px}
+.cnote{border-inline-start:3px solid var(--red);background:rgba(216,35,42,.09);border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#f0d9d0;margin-bottom:8px}
+.thumb{width:36px;height:36px;border-radius:9px;flex:none;background:#0b0908 center/cover no-repeat;border:1px solid var(--line)}
+.draw{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:6px 4px 2px;margin-bottom:10px}
+.sidehead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sidehead .n{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.prev{height:158px;border-radius:12px;border:1px dashed var(--line);background:#0b0908 center/cover no-repeat;
+  display:grid;place-items:center;color:var(--muted);font-size:12px;margin-bottom:8px}
+.prev.has{border-style:solid;border-color:var(--line)}
+.prev i{font-style:normal;background:rgba(0,0,0,.55);padding:5px 12px;border-radius:999px}
+.prev.has i{display:none}
+
+/* ---------- equipment detail ---------- */
+.hero{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px;background:var(--panel)}
+.hero .cv{height:8px;background:var(--chevron)}
+.hero .shot{background:#0b0908;border-bottom:1px solid var(--line)}
+.hero .shot img{display:block;width:100%;max-height:290px;object-fit:cover}
+.hero .in{padding:15px 15px 16px}
+.chip{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;padding:3px 9px;
+  border-radius:999px;background:rgba(255,192,0,.13);color:var(--amber);border:1px solid rgba(255,192,0,.3)}
+.hero h1{margin:9px 0 2px;font-size:23px}
+.hero .en{font-family:var(--mono);font-size:12.5px;color:var(--muted);direction:ltr;text-align:start}
+.crumb{font-family:var(--mono);font-size:11px;color:var(--muted);margin:0 0 12px}
+.sec{border-top:1px solid var(--line);padding:14px 0}
+.sec:first-of-type{border-top:0}
+.sec>h4{margin:0 0 8px;font-size:12px;font-family:var(--mono);letter-spacing:.12em;color:var(--muted);
+  text-transform:uppercase;display:flex;align-items:center;gap:7px;font-weight:500}
+.sec>h4::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--amber)}
+.sec.danger>h4::before{background:var(--red)}
+.sec ul{margin:0;padding-inline-start:18px}
+.sec li{margin-bottom:6px}
+.sec.danger li::marker{color:var(--red)}
+.sec p{margin:0}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;margin-bottom:9px}
+.steps li::before{content:counter(s,decimal);font-family:var(--mono);font-size:11px;font-weight:600;
+  width:22px;height:22px;flex:none;border-radius:7px;background:var(--panel2);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--amber);margin-top:2px}
+
+/* ---------- side tabs ---------- */
+.segs{display:flex;gap:5px;margin:14px 0 10px;background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:4px}
+.segs button{flex:1;padding:9px 4px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);transition:.15s}
+.segs button.on{background:var(--amber);color:#1a1206}
+.segs button b{display:block;font-family:var(--mono);font-size:9.5px;font-weight:500;opacity:.7;letter-spacing:.08em}
+
+/* ---------- equipment photo ---------- */
+.photo{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#0b0908}
+.thumb{width:44px;height:44px;border-radius:9px;object-fit:cover;flex:none;background:#0b0908;border:1px solid var(--line)}
+.nophoto{aspect-ratio:16/10;display:grid;place-items:center;background:
+  repeating-linear-gradient(135deg,#1a1512 0 12px,#15110f 12px 24px);color:var(--muted);font-size:12.5px;
+  font-family:var(--mono);gap:6px}
+.pick{border:1px dashed var(--line);border-radius:11px;padding:12px;text-align:center;font-size:13px;
+  color:var(--muted);width:100%;margin-bottom:6px}
+.pick.has{border-style:solid;padding:0;overflow:hidden}
+.pick img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.tspecs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px}
+.tspec{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.tspec b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;font-weight:500}
+.tspec i{font-style:normal;font-size:14px;font-weight:600}
+
+/* ---------- search ---------- */
+.searchbar{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:10px 13px;margin-bottom:14px}
+.searchbar input{flex:1;background:none;border:0;outline:none;font-size:15px;min-width:0}
+.searchbar svg{width:17px;height:17px;color:var(--muted);flex:none}
+
+/* ---------- back / actions ---------- */
+.back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;
+  font-family:var(--mono);margin:16px 0 12px}
+.back svg{width:15px;height:15px}
+html[dir="rtl"] .back svg{transform:scaleX(-1)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:9px 14px;
+  font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.btn:active{transform:scale(.96)}
+.btn svg{width:15px;height:15px}
+.btn.p{background:var(--amber);color:#1a1206;border-color:var(--amber)}
+.btn.d{color:#ff8f93;border-color:#4a2020}
+.btn.blk{width:100%;justify-content:center}
+
+/* ---------- sheet / editor ---------- */
+.scrim{position:fixed;inset:0;background:rgba(6,4,3,.72);z-index:90;opacity:0;pointer-events:none;transition:.2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;inset-inline:0;bottom:0;z-index:95;background:var(--panel);
+  border-top:1px solid var(--line);border-radius:20px 20px 0 0;max-height:88dvh;overflow-y:auto;
+  transform:translateY(102%);transition:transform .28s cubic-bezier(.3,.9,.3,1);
+  padding:0 16px calc(20px + env(safe-area-inset-bottom));max-width:760px;margin:0 auto}
+.sheet.on{transform:none}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:9px auto 4px}
+.sheet h3{font-family:var(--display);font-size:17px;margin:6px 0 14px}
+.f{margin-bottom:12px}
+.f label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;margin-bottom:5px}
+.f input,.f textarea,.f select{width:100%;background:var(--ink);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;outline:none;font-size:14.5px;transition:.15s}
+.f input:focus,.f textarea:focus{border-color:var(--amber)}
+.f textarea{min-height:88px;resize:vertical;line-height:1.7}
+.f .hint{font-size:11px;color:var(--muted);margin-top:4px}
+.f.ltr input,.f.ltr textarea{direction:ltr;text-align:start;font-family:var(--mono);font-size:13.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ---------- misc ---------- */
+.toast{position:fixed;inset-inline:0;bottom:22px;margin:0 auto;width:max-content;max-width:90%;
+  background:var(--amber);color:#1a1206;font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:999px;
+  z-index:120;opacity:0;transform:translateY(14px);transition:.24s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+.editbadge{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));inset-inline-start:16px;z-index:70;
+  background:var(--amber);color:#1a1206;font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:7px 13px;border-radius:999px;display:none;align-items:center;gap:6px}
+.editbadge.on{display:flex}
+.fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));inset-inline-end:16px;z-index:70;
+  width:52px;height:52px;border-radius:17px;background:var(--red);display:none;place-items:center;
+  box-shadow:0 8px 24px rgba(216,35,42,.4)}
+.fab.on{display:grid}
+.fab svg{width:22px;height:22px}
+.foot{text-align:center;color:var(--muted);font-size:11px;font-family:var(--mono);margin-top:30px;line-height:2}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* ============ v2 ============ */
+.shell{padding-bottom:118px}
+.topin{padding:9px 16px}
+.tabs{position:fixed;inset-inline:0;bottom:0;z-index:80;display:grid;grid-template-columns:repeat(4,1fr);
+  background:rgba(16,13,11,.93);backdrop-filter:blur(18px);border-top:1px solid var(--line);
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));max-width:760px;margin:0 auto}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px 4px;
+  color:var(--muted);font-size:10.5px;font-weight:600;border-radius:12px;position:relative;transition:.15s}
+.tabs button svg{width:21px;height:21px}
+.tabs button.on{color:var(--amber)}
+.tabs button.on::before{content:"";position:absolute;top:0;width:22px;height:2.5px;border-radius:2px;background:var(--amber)}
+.tabs .bdg{position:absolute;top:2px;inset-inline-end:22%;min-width:16px;height:16px;border-radius:9px;
+  background:var(--red);color:#fff;font-size:9.5px;font-family:var(--mono);display:none;place-items:center;padding:0 4px}
+.tabs .bdg.on{display:grid}
+.fab{bottom:calc(84px + env(safe-area-inset-bottom))}
+.editbadge{bottom:calc(84px + env(safe-area-inset-bottom))}
+
+.card{background:linear-gradient(155deg,#2a221c,#1a1512 55%);box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+.card .hd{padding:14px 15px 4px;align-items:flex-start}
+.card .hd h3{font-size:17.5px;letter-spacing:-.2px}
+.card .hd p{margin-top:4px;font-size:11px;letter-spacing:.02em}
+.codechip{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:7px;
+  background:rgba(255,192,0,.12);color:var(--amber);border:1px solid rgba(255,192,0,.28);white-space:nowrap}
+.metarow{display:flex;gap:6px;flex-wrap:wrap;padding:0 15px 10px}
+.mtag{font-family:var(--mono);font-size:10.5px;color:var(--muted);border:1px solid var(--line);
+  border-radius:999px;padding:3px 9px}
+.mtag b{color:var(--text);font-weight:600}
+
+/* بطاقة الحساب */
+.acct{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel);margin-bottom:14px}
+.acct .cv{height:7px;background:var(--chevron)}
+.acct .in{padding:16px;display:flex;align-items:center;gap:13px}
+.avatar{width:52px;height:52px;border-radius:15px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(160deg,var(--red),var(--red-dk));font-family:var(--display);font-weight:900;font-size:19px;color:#fff}
+.acct .who{flex:1;min-width:0}
+.acct .who b{display:block;font-family:var(--display);font-size:17px}
+.acct .who span{display:block;font-size:12px;color:var(--amber);font-weight:600;margin-top:2px}
+.acct .who i{display:block;font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:3px;direction:ltr;text-align:start}
+.acct .rows{border-top:1px solid var(--line)}
+.arow{display:flex;align-items:center;gap:11px;width:100%;padding:13px 16px;border-top:1px solid var(--line);text-align:start}
+.arow:first-child{border-top:0}
+.arow .t{flex:1;min-width:0}
+.arow .t b{display:block;font-size:14px;font-weight:600}
+.arow .t span{display:block;font-size:11.5px;color:var(--muted)}
+.arow .ic{width:34px;height:34px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);
+  display:grid;place-items:center;flex:none;color:var(--amber)}
+.arow .ic svg{width:16px;height:16px}
+.sw{width:42px;height:24px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);flex:none;position:relative;transition:.18s}
+.sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:.18s}
+.sw.on{background:var(--amber);border-color:var(--amber)}
+.sw.on::after{inset-inline-start:20px;background:#1a1206}
+
+/* الإشعارات */
+.notice{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:13px 14px;margin-bottom:10px;position:relative}
+.notice.new{border-color:rgba(255,192,0,.45)}
+.notice.new::before{content:"";position:absolute;top:14px;inset-inline-start:-1px;width:3px;height:22px;
+  border-radius:0 3px 3px 0;background:var(--amber)}
+.notice h4{margin:0 0 5px;font-size:15px;font-family:var(--display);font-weight:700}
+.notice p{margin:0;font-size:13.5px;color:#dcd2c8;white-space:pre-wrap}
+.notice time{display:block;margin-top:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.otp{display:flex;gap:8px;justify-content:center;margin:6px 0 4px;direction:ltr}
+.otpbox{background:var(--ink);border:1px solid var(--line);border-radius:10px;width:44px;height:52px;
+  display:grid;place-items:center;font-family:var(--mono);font-size:20px;font-weight:600;color:var(--amber)}
+.demo{border:1px dashed rgba(255,192,0,.4);background:rgba(255,192,0,.07);border-radius:11px;padding:11px 13px;
+  font-size:12.5px;color:#f0e2c4;margin-bottom:12px}
+.demo b{font-family:var(--mono);font-size:17px;letter-spacing:.28em;display:block;margin-top:6px;color:var(--amber)}
+.lock{text-align:center;padding:26px 16px}
+.lock svg{width:40px;height:40px;color:var(--amber);margin-bottom:10px}
+.lock b{display:block;font-family:var(--display);font-size:17px;margin-bottom:5px}
+.lock p{margin:0 0 16px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="band"></div>
+  <div class="topin">
+    <button class="brand" onclick="go('#/')" aria-label="الرئيسية">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 2 L36 8 v12c0 9-6.6 16-16 18C10 36 4 29 4 20V8Z" fill="#D8232A"/>
+        <path d="M20 6.2 L32 10.7v9.3c0 7.2-5.1 12.8-12 14.6-6.9-1.8-12-7.4-12-14.6v-9.3Z" fill="#100D0B"/>
+        <path d="M20 10c2.4 3.4 1 5.6-.3 7.4-1.4 2-2.4 3.6-1 6 .6 1 1.5 1.7 1.5 1.7-3.6-.4-6.2-3-6.2-6.3 0-1.6.5-2.6.5-2.6-.1 1.6.9 2.6 1.7 2.7.9.1 1.3-.6 1-1.6-.9-3 .6-5.6 2.8-7.3Z" fill="#FFC000"/>
+        <path d="M22.4 15.6c2.6 1.8 4 4 4 6.6 0 1.6-.6 3-1.6 4 .3-1.6-.3-3-1.5-4.2-1-1-1.4-2-1.3-3.2-.6.7-1 1.6-1 2.6-1.2-2.2-.6-4.2 1.4-5.8Z" fill="#FFE14D"/>
+      </svg>
+      <span class="txt" style="min-width:0">
+        <b id="brandT">أسطول الدفاع المدني</b>
+        <span id="brandS">QCD · TRAINING</span>
+      </span>
+    </button>
+    <button class="tbtn lang" onclick="toggleLang()" id="langBtn">EN</button>
+  </div>
+</header>
+
+<main class="shell" id="app"></main>
+
+<div class="editbadge" id="editBadge">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16Z"/></svg>
+  <span id="editBadgeT">وضع التعديل</span>
+</div>
+<button class="fab" id="fab" aria-label="إضافة">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<nav class="tabs" id="tabs" aria-label="التنقل">
+  <button data-t="fleet" onclick="go('#/')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9l3-4h9l3 4h3v8"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/></svg>
+    <span id="tb1">الأسطول</span></button>
+  <button data-t="search" onclick="go('#/search')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <span id="tb2">بحث</span></button>
+  <button data-t="notices" onclick="go('#/notices')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 16V11a6 6 0 1 0-12 0v5l-1.5 3h15Z"/><path d="M10 21h4"/></svg>
+    <span id="tb3">الإشعارات</span><span class="bdg" id="tabBadge"></span></button>
+  <button data-t="account" onclick="go('#/account')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.7"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+    <span id="tb4">حسابي</span></button>
+</nav>
+
+<div class="scrim" id="scrim" onclick="closeSheet()"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true"></section>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileIn" accept="application/json" hidden>
+<input type="file" id="imgIn" accept="image/*" hidden>
+
+<script>
+/* =========================================================
+   1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
+   ========================================================= */
+const KEY = 'qcd_fleet_v9';
+const IMGK = 'qcdimg:';
+const store = {
+  async get(k){
+    try{ if(window.storage){ const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; } }catch(e){}
+    try{ const v = window.localStorage && localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; }
+  },
+  async set(k,v){
+    const s = JSON.stringify(v);
+    try{ if(window.storage){ await window.storage.set(k,s); return true; } }catch(e){}
+    try{ localStorage.setItem(k,s); return true; }catch(e){ return false; }
+  },
+  async del(k){
+    try{ if(window.storage){ await window.storage.delete(k); return; } }catch(e){}
+    try{ localStorage.removeItem(k); }catch(e){}
+  },
+  async keys(prefix){
+    try{ if(window.storage){ const r = await window.storage.list(prefix); return (r&&r.keys)||[]; } }catch(e){}
+    try{ return Object.keys(localStorage).filter(k=>k.startsWith(prefix)); }catch(e){ return []; }
+  }
+};
+const uid = p => p+'_'+Math.random().toString(36).slice(2,8);
+
+/* =========================================================
+   2. نصوص الواجهة
+   ========================================================= */
+const UI = {
+  brand:['أسطول الدفاع المدني','Civil Defence Fleet'],
+  brandSub:['قطر · تدريب','QATAR · TRAINING'],
+  fleetEyebrow:['الأسطول','THE FLEET'],
+  fleetTitle:['سيارات الدفاع المدني','Civil Defence Appliances'],
+  fleetSub:['اختر السيارة، ثم افتح الخانة لتتعرف على معداتها. مرجع تدريبي لأفراد الدفاع المدني الجدد.','Pick an appliance, open a compartment, learn its equipment. A training reference for new recruits.'],
+  bays:['خانة','bays'],
+  items:['معدة','items'],
+  cabDriver:['كابينة السائق','Driver cab'],
+  cabCrew:['كابينة الطاقم','Crew cab'],
+  bay:['خانة','Bay'],
+  compartments:['الخانات والمعدات','COMPARTMENTS & EQUIPMENT'],
+  specsT:['البطاقة الفنية','SPEC SHEET'],
+  tapHint:['اضغط على أي خانة في الرسم أو من القائمة بالأسفل.','Tap a compartment on the drawing or in the list below.'],
+  uses:['الاستعمالات','USES'],
+  howto:['طريقة الاستعمال','HOW TO USE'],
+  hazards:['المخاطر والاحتياطات','HAZARDS & PRECAUTIONS'],
+  notes:['ملاحظات وفحص دوري','NOTES & CHECKS'],
+  back:['رجوع','Back'],
+  backFleet:['كل السيارات','All appliances'],
+  search:['ابحث عن معدة أو سيارة…','Search equipment or appliance…'],
+  searchT:['البحث','SEARCH'],
+  noRes:['لا نتيجة مطابقة','No match'],
+  noResS:['جرب اسم المعدة بالعربية أو بالإنجليزية.','Try the equipment name in Arabic or English.'],
+  emptyC:['لا توجد معدات في هذه الخانة بعد','No equipment recorded in this bay yet'],
+  emptyCs:['فعّل وضع التعديل من القائمة ثم أضف أول معدة.','Turn on edit mode from the menu, then add the first item.'],
+  addItem:['إضافة معدة','Add equipment'],
+  editItem:['تعديل المعدة','Edit equipment'],
+  editComp:['تعديل الخانة','Edit compartment'],
+  editVeh:['تعديل السيارة','Edit appliance'],
+  del:['حذف','Delete'],
+  save:['حفظ','Save'],
+  cancel:['إلغاء','Cancel'],
+  nameAr:['الاسم بالعربية','Name (Arabic)'],
+  nameEn:['الاسم بالإنجليزية','Name (English)'],
+  cat:['التصنيف','Category'],
+  qty:['العدد','Quantity'],
+  lineHint:['كل سطر = نقطة مستقلة','One line = one bullet'],
+  settings:['الإعدادات','Settings'],
+  language:['اللغة','Language'],
+  editMode:['وضع التعديل','Edit mode'],
+  editModeS:['يسمح بإضافة وتعديل وحذف المعلومات.','Lets you add, edit and delete content.'],
+  exportJ:['تصدير البيانات (JSON)','Export data (JSON)'],
+  importJ:['استيراد بيانات','Import data'],
+  reset:['استرجاع البيانات الأصلية','Restore original data'],
+  install:['تثبيت التطبيق','Install app'],
+  saved:['تم الحفظ','Saved'],
+  deleted:['تم الحذف','Deleted'],
+  imported:['تم استيراد البيانات','Data imported'],
+  resetOk:['تم الاسترجاع','Restored'],
+  confirmDel:['هل تريد الحذف؟ لا يمكن التراجع.','Delete this? It cannot be undone.'],
+  side:['الجهة','Side'],
+  sides:[['يمين','يسار','خلف','أعلى','—'],['Right','Left','Rear','Top','—']],
+  vehNote:['ملاحظة تشغيلية','Operational note'],
+  addComp:['إضافة خانة','Add compartment'],
+  inCompartment:['في','in'],
+  rightSide:['الجهة اليمنى','Right side'],
+  leftSide:['الجهة اليسرى','Left side'],
+  cabTab:['الكابينة','Cab'],
+  otherTab:['أخرى','Other'],
+  noBays:['لا توجد خانات على هذه الجهة','No bays on this side'],
+  noBaysS:['أضف خانة من وضع التعديل.','Add one from edit mode.'],
+  techSpecs:['المواصفات الفنية','TECHNICAL SPECS'],
+  photo:['صورة المعدة','Photo'],
+  addPhoto:['اضغط لاختيار صورة','Tap to pick a photo'],
+  rmPhoto:['حذف الصورة','Remove photo'],
+  noPhoto:['لا توجد صورة','No photo'],
+  specsHint:['كل سطر: المواصفة : القيمة','One line: label : value'],
+  imgBig:['الصورة كبيرة — تم تصغيرها تلقائيًا.','Photo was large — resized automatically.'],
+  sideR:['الجهة اليمنى','RIGHT SIDE'],
+  sideL:['الجهة اليسرى','LEFT SIDE'],
+  sideO:['خانات أخرى','OTHER COMPARTMENTS'],
+  cabsT:['الكابينات','CABS'],
+  tech:['المواصفات الفنية','TECHNICAL DATA'],
+  photo:['صورة المعدة','Equipment photo'],
+  pickPhoto:['اختيار صورة','Choose photo'],
+  rmPhoto:['إزالة الصورة','Remove photo'],
+  noPhoto:['لا توجد صورة بعد','No photo yet'],
+  techHint:['كل سطر: المواصفة ثم نقطتان ثم القيمة','One line: label, colon, value'],
+  imgHint:['تُصغَّر الصورة تلقائيًا قبل الحفظ.','The photo is downscaled automatically before saving.'],
+  tabFleet:['الأسطول','Fleet'], tabSearch:['بحث','Search'], tabNotices:['الإشعارات','Notices'], tabAcct:['حسابي','Account'],
+  acctT:['الحساب','ACCOUNT'], guest:['زائر','Guest'], guestRole:['اطّلاع فقط','View only'],
+  adminRole:['مدير التطبيق','App administrator'],
+  loginT:['تسجيل دخول المدير','Administrator sign in'],
+  loginS:['أدخل رقم الجوال المسجَّل ليصلك رمز تحقق.','Enter the registered mobile number to receive a verification code.'],
+  phone:['رقم الجوال','Mobile number'],
+  sendCode:['إرسال الرمز','Send code'],
+  verifyT:['رمز التحقق','Verification code'],
+  verifyS:['أدخل الرمز المكوّن من ستة أرقام.','Enter the six digit code.'],
+  verify:['تأكيد','Verify'],
+  resend:['إعادة الإرسال','Resend'],
+  wrongPhone:['هذا الرقم غير مصرّح له بالإدارة.','This number is not authorised.'],
+  wrongCode:['الرمز غير صحيح.','Incorrect code.'],
+  welcome:['أهلًا بك، حميد','Welcome back'],
+  signout:['تسجيل الخروج','Sign out'],
+  signoutQ:['تسجيل الخروج من حساب المدير؟','Sign out of the administrator account?'],
+  demoNote:['وضع تجريبي: لا توجد بوابة رسائل مربوطة بعد، لذا يظهر الرمز هنا. عند ربط البوابة سيصل الرمز رسالةً على الجوال.','Demo mode: no SMS gateway connected yet, so the code is shown here.'],
+  lockT:['هذا القسم للمدير','Administrator only'],
+  lockS:['سجّل دخولك برقم الجوال لتتمكن من التعديل والنشر.','Sign in with your mobile number to edit and publish.'],
+  signin:['تسجيل الدخول','Sign in'],
+  noNotices:['لا توجد إشعارات','No notices'],
+  noNoticesS:['ستظهر هنا إعلانات المدير وتحديثات المعدات.','Announcements and equipment updates will appear here.'],
+  newNotice:['نشر إشعار','Publish a notice'],
+  nTitle:['العنوان','Title'],
+  nBody:['نص الإشعار','Message'],
+  publish:['نشر','Publish'],
+  published:['تم نشر الإشعار','Notice published'],
+  allowPush:['تفعيل تنبيهات الجهاز','Enable device alerts'],
+  pushOn:['تنبيهات الجهاز مفعّلة','Device alerts enabled'],
+  pushBlocked:['التنبيهات محجوبة من إعدادات المتصفح.','Alerts are blocked in the browser settings.'],
+  markAll:['تعليم الكل كمقروء','Mark all as read'],
+  stats:['إحصاءات','Overview'],
+  vehiclesN:['سيارة','appliances'],
+  disclaimer:['محتوى تدريبي داخلي — يُعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.','Internal training content — always follow the manufacturer manual and official SOPs.']
+};
+let lang = 0; // 0 = ar, 1 = en
+const T = k => UI[k][lang];
+const t = o => (!o ? '' : (lang===1 ? (o.en||o.ar||'') : (o.ar||o.en||'')));
+
+/* =========================================================
+   3. البيانات الأولية
+   ========================================================= */
+const E = (ar,en,cat,uses,howto,haz,notes,tech) => ({id:uid('e'),name:{ar,en},cat,qty:'',
+  uses:{ar:uses||'',en:''},howto:{ar:howto||'',en:''},hazards:{ar:haz||'',en:''},
+  notes:{ar:notes||'',en:''},tech:{ar:tech||'',en:''}});
+const N = (n,e) => (e.qty = String(n), e);
+const A = (ar,en,cat,uses,howto,haz,tech) => ({id:uid('e'),name:{ar,en},cat:cat||'',qty:'',
+  uses:{ar:uses||'',en:''},howto:{ar:howto||'',en:''},hazards:{ar:haz||'',en:''},
+  notes:{ar:'',en:''},tech:{ar:tech||'',en:''}});
+const I = (ar,en,q,cat,note,uses,howto,haz,tech) => ({id:uid('e'),name:{ar,en},cat:cat||'',qty:String(q||''),
+  uses:{ar:uses||'',en:''},howto:{ar:howto||'',en:''},hazards:{ar:haz||'',en:''},
+  notes:{ar:note||'',en:''},tech:{ar:tech||'',en:''}});
+
+/* معدات تتكرر في أكثر من خانة — كل نداء ينشئ نسخة مستقلة */
+const HOSE45 = () => E('خرطوم حريق 45 مم','Attack hose 45 mm','خراطيم',
+  'خط الهجوم الأساسي للحرائق الصغيرة والمتوسطة\nتبريد الأسطح والمعرضات للحريق',
+  'انزل بلفة الخرطوم قرب مكان العمل قبل فردها\nافرد الخط بعيدًا عن الالتواءات والأجسام الحادة\nركّب القارنة على القاذف واضغط حتى تعشق\nاطلب الماء بالإشارة المتفق عليها\nافتح المحبس تدريجيًا لتفادي الصدمة',
+  'قوة الارتداد تدفع رجل الإطفاء للخلف — قدم للأمام ومسكة ثابتة\nالخرطوم الملتوي قد ينفجر عند رفع الضغط\nالخرطوم المبلَّل على الأرض يسبب الانزلاق',
+  'يُغسل ويُجفف بعد كل استعمال ثم يُعاد لفّه',
+  'القطر: 45 مم\nالطول: 20 م / لفة\nالقارنة: ستورز\nضغط التشغيل: 7 بار تقريبًا');
+
+const HOSE65 = () => E('خرطوم حريق 65 مم','Attack/supply hose 65 mm','خراطيم',
+  'الخط الرئيسي ذو التدفق الأعلى\nالتغذية من الحنفية أو من مركبة أخرى\nالحرائق الكبيرة التي تحتاج كمية ماء أكبر',
+  'يُفرد بشخصين لثقله\nثبّت الوصلات جيدًا قبل رفع الضغط\nإن استُعمل كخط هجوم فيلزم رجلان على القاذف',
+  'الارتداد أعلى بكثير من خط 45 مم\nثقله يسبب إجهاد الظهر عند الرفع الخاطئ',
+  '', 'القطر: 65 مم\nالطول: 20 م / لفة\nالقارنة: ستورز');
+
+const BRANCH = () => E('قاذف ماء','Water branch / nozzle','خراطيم',
+  'التحكم في شكل الماء الخارج: رذاذ واسع للحماية ومستقيم للاختراق والمدى',
+  'ابدأ دائمًا بوضعية الرذاذ للحماية\nحرّك الطوق لضبط الزاوية حسب المسافة\nافتح ببطء وأغلق ببطء',
+  'الفتح أو الغلق المفاجئ يسبب مطرقة مائية في الخط\nالماء المستقيم على تيار كهربائي يوصل الصعق\nرذاذ الماء على زيت مشتعل يسبب انفجارًا بخاريًا',
+  '', 'المدخل: قارنة ستورز 45 مم\nالأوضاع: مغلق · رذاذ · مستقيم');
+
+const SUCSPAN = () => E('مفتاح شد خرطوم الشفط','Suction hose spanner','عدد يدوية',
+  'شد وفك قارنات خراطيم الشفط والمصفاة',
+  'ضع فكّي المفتاح على أذن القارنة\nشد باتجاه القفل حتى الإحكام التام\nعند الفك ثبّت الطرف الآخر',
+  'لا تفك أي قارنة قبل تصفير الضغط في الخط\nانزلاق المفتاح يصيب اليد\nلا يُستعمل كمطرقة');
+
+const DIV3 = () => E('مقسم ماء (3 رؤوس)','Dividing breeching, 3 outlets','خراطيم',
+  'تقسيم خط وارد واحد إلى عدة خطوط عمل مع تحكم مستقل بكل خط',
+  'ثبّته على الأرض في مكان آمن قريب من الفرق\nأغلق جميع الفالفات قبل طلب الماء\nافتح الخط المطلوب تدريجيًا',
+  'فتح كل الخطوط معًا يُسقط الضغط على الجميع\nالمقسم غير المثبّت يقفز عند رفع الضغط',
+  '', 'المداخل: 1\nالمخارج: 3\nالفالفات: مستقلة لكل مخرج');
+
+const STRAPS = () => E('سبتات لحمل الخراطيم','Hose carrying straps','ملحقات',
+  'حمل لفة الخرطوم على الكتف وتثبيتها أثناء النقل والصعود',
+  'لُف الحزام حول اللفة وشدّه قبل الرفع\nاجعل الخرطوم على الكتف واليد حرة للتوازن',
+  'الحزام غير المشدود ينزلق فتسقط اللفة على القدم',
+  'في المستودع');
+
+const PWDEXT = () => E('طفاية بودرة','Dry powder extinguisher','طفايات',
+  'حرائق الفئات A و B و C\nالتدخل الأول السريع قبل مدّ الخراطيم',
+  'اسحب المسمار الأمني\nوجّه الخرطوم إلى قاعدة اللهب\nاضغط المقبض\nحرّك أفقيًا يمينًا ويسارًا',
+  'البودرة تحجب الرؤية فورًا في الأماكن المغلقة\nلا تبرّد المادة فقد تشتعل مرة أخرى\nتُفسد الأجهزة الإلكترونية الدقيقة',
+  '', 'الوزن: 9 كغ\nالفئات: A · B · C\nمدة التفريغ: 18 ثانية تقريبًا\nالمدى الفعّال: 4 – 6 م');
+
+function seed(){
+  const C = (n,ar,en,kind,side,items,note) => ({id:uid('c'),no:n,kind,side,name:{ar,en},note:{ar:note||'',en:''},items:items||[]});
+  const cab = (ar,en,items)=>C(0,ar,en,'cab','—',items);
+  const cabN = cab;
+
+  const riv = [
+    cab('كابينة السائق','Driver cab',[
+      E('جهاز اللاسلكي الثابت','Mobile radio','اتصالات',
+        'التواصل مع غرفة العمليات وباقي المركبات أثناء التحرك وفي الموقع.',
+        'شغّل الجهاز قبل التحرك\nتأكد من القناة المخصصة للحادث\nاضغط زر الإرسال ثم تكلم بوضوح وباختصار\nأكد استلام كل رسالة',
+        'انشغال القناة يمنع نداءات الاستغاثة — لا تطل الإرسال\nالتحدث أثناء القيادة يشتت السائق'),
+      E('لوحة التحكم في المضخة والصفارة','Pump & siren control panel','قيادة',
+        'تشغيل الصفارة والأضواء التحذيرية ومتابعة مؤشرات المضخة والخزان.',
+        'شغّل الأضواء قبل الخروج من المحطة\nراقب مؤشر مستوى الماء باستمرار\nلا تشغّل المضخة قبل التأكد من مصدر الماء',
+        'تشغيل المضخة بدون ماء يتلف المانع الميكانيكي (السيل) خلال ثوانٍ')
+    ]),
+    C(1,'خانة المضخة والخراطيم','Pump & hose bay','bay','يمين',[
+      E('خرطوم هجوم 45 مم','Attack hose 45 mm','خراطيم',
+        'خط الهجوم الأساسي للحرائق الصغيرة والمتوسطة\nتبريد الأسطح والمعرضات\nغسل الانسكابات البترولية الخفيفة',
+        'انزع الخرطوم من الخانة واتجه نحو الحريق قبل الفرد\nافرد الخط بعيدًا عن الالتواءات والأجسام الحادة\nركّب القارنة على القاذف واضغط حتى تسمع صوت التعشيق\nاطلب الماء بالإشارة المتفق عليها\nافتح المحبس تدريجيًا لتفادي الصدمة',
+        'قوة الارتداد تدفع رجل الإطفاء للخلف — امسك بوضعية ثابتة وقدم للأمام\nالخرطوم الملتوي قد ينفجر عند رفع الضغط\nالخرطوم المبلَّل على الأرض يسبب الانزلاق',
+        'يُغسل ويُجفف بعد كل استعمال\nاختبار ضغط دوري حسب جدول المحطة',
+        'القطر: 45 مم\nالطول: 20 م / لفة\nضغط التشغيل: 7 بار\nضغط الاختبار: 15 بار\nالقارنة: ستورز\nالوزن: 8 كغ تقريبًا'),
+      E('قاذف متعدد الأغراض','Multi-purpose branch/nozzle','خراطيم',
+        'التحكم في شكل الماء: رذاذ واسع للحماية، ومستقيم للاختراق والمدى.',
+        'ابدأ دائمًا بوضعية الرذاذ للحماية\nحرّك الطوق لضبط الزاوية حسب المسافة\nافتح ببطء وأغلق ببطء',
+        'الفتح المفاجئ يسبب مطرقة مائية في الخط\nالماء المستقيم على تيار كهربائي يوصل الصعق\nرذاذ الماء على زيت مشتعل يسبب انفجار بخاري'),
+      E('مفتاح خراطيم','Hose spanner','عدد يدوية',
+        'فك وربط القارنات المشدودة بعد رفع الضغط.',
+        'ضع فكي المفتاح على أذن القارنة\nأدر في اتجاه فك التعشيق مع تثبيت الطرف الآخر',
+        'لا تفك أي قارنة قبل تصفير الضغط في الخط'),
+      E('طفاية بودرة جافة 9 كغ','Dry powder extinguisher 9 kg','طفايات',
+        'حرائق الفئات A و B و C\nالتدخل الأول السريع قبل مد الخراطيم',
+        'اسحب المسمار الأمني\nوجّه الخرطوم إلى قاعدة اللهب\nاضغط المقبض\nحرّك أفقيًا يمينًا ويسارًا',
+        'البودرة تحجب الرؤية فورًا في الأماكن المغلقة\nلا تستعمل على أجهزة إلكترونية دقيقة\nخطر الاشتعال مرة أخرى لأنها لا تبرّد','',
+        'الوزن: 9 كغ\nالفئات: A · B · C\nمدة التفريغ: 18 ثانية تقريبًا\nالمدى الفعّال: 4 – 6 م\nالمادة: بودرة ABC جافة')
+    ]),
+    C(2,'خانة أجهزة التنفس','Breathing apparatus bay','bay','يمين',[
+      E('جهاز التنفس المستقل SCBA','Self-contained breathing apparatus','وقاية',
+        'التنفس داخل الأجواء المسمومة أو منعدمة الأكسجين\nالدخول للأماكن المغلقة والمليئة بالدخان',
+        'افحص ضغط الأسطوانة: لا يقل عن 80٪\nارتدِ الحمّالة واضبط الأحزمة\nالبس القناع وتأكد من إحكامه باختبار الشفط\nركّب منظّم الهواء واسمع صوت التدفق\nسجّل وقت الدخول عند ضابط التحكم بالمداخل',
+        'صافرة الإنذار تعني بدء الخروج فورًا وليس استمرار العمل\nاللحية تمنع إحكام القناع وتسمح بدخول الغازات\nالمجهود العالي يستهلك الهواء أضعاف المعدل',
+        'يُفحص الضغط والصمامات في بداية كل وردية',
+        'سعة الأسطوانة: 6.8 لتر\nضغط التعبئة: 300 بار\nمدة العمل: 30 – 45 دقيقة حسب المجهود\nإنذار الضغط المنخفض: 55 بار\nالوزن: 9 – 11 كغ'),
+      E('كاشف الغازات متعدد','Multi-gas detector','قياس',
+        'قياس الأكسجين والغازات القابلة للاشتعال وأول أكسيد الكربون وكبريتيد الهيدروجين قبل الدخول.',
+        'شغّل الجهاز في هواء نظيف حتى ينتهي المعايرة\nأنزله تدريجيًا في الأماكن المنخفضة والمصارف\nانتظر وقت الاستجابة قبل الحكم على المكان',
+        'الغازات الثقيلة تتجمع في المستويات المنخفضة\nقراءة صفرية لا تعني الأمان إن كان الجهاز خارج المعايرة'),
+      E('كاميرا حرارية','Thermal imaging camera','قياس',
+        'تحديد بؤرة الحريق خلف الجدران\nالبحث عن مصابين في الدخان الكثيف\nمتابعة تدرج الحرارة قبل الاندفاع الحراري',
+        'امسح الغرفة من الأعلى للأسفل بحركة بطيئة\nقارن الفروق الحرارية بدل الاعتماد على الرقم فقط',
+        'الكاميرا لا ترى خلف الزجاج ولا داخل الماء\nالاعتماد الكامل عليها يفقد الفريق الإحساس بالاتجاه')
+    ]),
+    C(3,'خانة معدات الإنقاذ الخفيفة','Light rescue bay','bay','يسار',[
+      E('مقص هيدروليكي','Hydraulic cutter','إنقاذ',
+        'قص أعمدة المركبة وفتح مسار لإخراج المصاب في حوادث السير.',
+        'ثبّت المركبة ونظّم الزجاج قبل القص\nحدد نقاط القص بعيدًا عن أعمدة الوسائد الهوائية\nأدخل الشفرة عموديًا على القطعة\nأبقِ الأطراف بعيدة عن مسار الشفرة',
+        'قص عمود فيه وسادة هوائية غير مفرغة يسبب انفجارها\nالقطع المقصوصة تطير بقوة — يجب تغطيتها\nزيت هيدروليكي تحت ضغط عالٍ يخترق الجلد'),
+      E('وسائد رفع هوائية','Pneumatic lifting bags','إنقاذ',
+        'رفع الأجسام الثقيلة لتحرير مصاب محتجز تحتها.',
+        'ضع الوسادة على سطح مستوٍ وصلب\nارفع بمقدار قليل ثم ادعم بالإسفين فورًا\nكرر: ارفع قليلًا ثم ادعم',
+        'الرفع بدون دعامات يجعل الحمل ينزلق فجأة\nتكديس أكثر من وسادتين يفقد الاتزان')
+    ]),
+    C(4,'خانة الإضاءة والتأمين','Lighting & scene safety bay','bay','يسار',[
+      E('كشاف ميداني قابل للشحن','Rechargeable scene light','إضاءة',
+        'إضاءة موقع الحادث ليلًا وداخل الأنفاق والمواقف المغلقة.',
+        'ثبّته على الحامل باتجاه منطقة العمل\nتجنّب توجيهه في وجه السائقين المارّين',
+        'يسخن السطح الأمامي — لا يُلمس مباشرة بعد التشغيل'),
+      E('أقماع ولوحات تحذيرية','Traffic cones & warning signs','تأمين موقع',
+        'حماية فريق العمل من حركة المرور وتحديد منطقة العمل.',
+        'ابدأ الوضع من بعيد باتجاه المركبات القادمة نحو الموقع\nوسّع المنطقة أكثر مما تظن ضروريًا',
+        'الوقوف خارج المنطقة المؤمّنة أو إدارة الظهر للسير خطر مباشر')
+    ])
+  ];
+
+  const std = (n, names) => names.map((x,i)=>C(i+1,x[0],x[1],'bay', (i+1)%2 ? 'يسار':'يمين', []));
+
+  return {
+    version:2, updated:Date.now(),
+    notices:[{id:uid('n'), at:Date.now(), title:'مرحبًا بكم في تطبيق الأسطول',
+      body:'هذا التطبيق مرجع تدريبي لأفراد الدفاع المدني الجدد: كل سيارة، وكل خانة فيها، وكل معدة مع استعمالاتها وطريقة استعمالها ومخاطرها.\nاعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.'}],
+    vehicles:[
+      { id:'riv', code:'RIV 11904', maker:'Ford', name:{ar:'التدخل السريع',en:'Rapid Intervention Vehicle'},
+        note:{ar:'أول مركبة تصل للحادث. سرعة الوصول ومعدات القص والفتح أهم من كمية الماء.',en:'First on scene: speed and cutting tools matter more than water volume.'},
+        specs:[{k:{ar:'رقم اللوحة',en:'Plate no.'},v:{ar:'11904',en:'11904'}},
+               {k:{ar:'النوع',en:'Make'},v:{ar:'فورد',en:'Ford'}},
+               {k:{ar:'الشكل',en:'Body'},v:{ar:'تدخل سريع',en:'Rapid intervention'}},
+               {k:{ar:'الموديل',en:'Model year'},v:{ar:'2021',en:'2021'}}],
+        compartments:[
+          cabN('كابينة السائق','Driver cab',[
+            A('كشاف يدوي مقاوم للمخاطر','Intrinsically safe torch','إضاءة',
+              'الإضاءة في الأجواء التي قد تحتوي أبخرة قابلة للاشتعال',
+              'افحص الشحن في بداية الوردية\nشغّله وأطفئه خارج المنطقة الخطرة',
+              'الكشاف العادي غير المقاوم قد يُشعل الأبخرة بشرارة داخلية'),
+            A('جهاز كشف الغازات','Gas detector','قياس',
+              'قياس الأكسجين والغازات القابلة للاشتعال وأول أكسيد الكربون قبل الدخول',
+              'شغّله في هواء نظيف حتى تنتهي التهيئة\nأنزله تدريجيًا في الأماكن المنخفضة والمصارف\nانتظر زمن الاستجابة قبل الحكم على المكان',
+              'الغازات الثقيلة تتجمع في المستويات المنخفضة\nقراءة صفرية لا تعني الأمان إن كان الجهاز خارج المعايرة'),
+            A('قاطع حزام','Seat belt cutter','إنقاذ',
+              'قص حزام الأمان لتحرير المصاب في حوادث السير',
+              'أدخل الحزام في فتحة الشفرة واسحب بحركة واحدة\nثبّت رأس المصاب أثناء القص',
+              'الشفرة مكشوفة — تُحمل في غمدها'),
+            A('طقم معدات البنشر (رافعة وكيس مفاتيح)','Tyre repair set with jack','عدد يدوية','',
+              'ممنوع دخول أي جزء من الجسم تحت سيارة محمولة على الرافعة وحدها'),
+            A('ريموت الونش','Winch remote','رفع وسحب',
+              'تشغيل ونش السحب عن بُعد',
+              'ثبّت السيارة قبل السحب\nاربط الخطاف في نقطة تحمّل قوية\nقف من جهة جانبية بعيدًا عن خط السلك',
+              'انقطاع السلك تحت الشد يضرب كالسوط — أخلِ خط السحب'),
+            A('مفتاح اللفت','Lift key','ملحقات','','')
+          ]),
+
+          C(1,'الخانة رقم (1) جهة اليسار','Bay 1 — left','bay','يسار',[
+            A('جاكيت تحذيري فسفوري','Hi-vis jacket','وقاية',
+              'إظهار الفرد لسائقي المركبات أثناء العمل على الطريق','',
+              'العمل على الطريق بدون سترة عاكسة خطر مباشر'),
+            A('حبل إنقاذ مع كيس الحمل','Rescue rope with bag','حبال',
+              'الإنزال والرفع والتأمين في عمليات الإنقاذ',
+              'افحص الحبل بصريًا قبل كل استعمال\nاحمِ الحبل من الحواف الحادة\nاستعمل العقد المعتمدة فقط',
+              'الحبل المتضرر أو المحترق ينقطع تحت الحمل\nالاحتكاك بالحافة الحادة يقطعه في ثوانٍ'),
+            A('أغطية ألمنيوم','Aluminium covers','ملحقات','',''),
+            A('شنكل رفع قوة 1.6 كغ','Lifting shackle 1.6 t','رفع وسحب','',
+              'الشنكل بلا قفل أمان ينفلت تحت الحمل\nتجاوز الطاقة المدوّنة يكسره فجأة'),
+            A('شنكل رفع قوة 3.15 كغ','Lifting shackle 3.15 t','رفع وسحب','',''),
+            A('معدة مسك الثعابين (عصا)','Snake catching pole','تدخلات خاصة',
+              'الإمساك بالثعابين والزواحف وإبعادها بأمان',
+              'اقترب من مسافة آمنة وخلف رأس الحيوان\nثبّت الرأس أولًا ثم ضعه في الوعاء المخصص',
+              'اللدغة قد تكون سامة — يُطلب الإسعاف فورًا\nلا تمسك الحيوان باليد إطلاقًا'),
+            A('صندوق معدات كهربائية','Electrical equipment box','كهرباء','',''),
+            A('ماكينة جلخ مع ملحقاتها','Angle grinder with accessories','قطع ونشر',
+              'قص الحديد وفتح الأقفال والمداخل',
+              'ركّب الغطاء الواقي دائمًا\nالبس واقي الوجه والقفاز\nامسك بكلتا اليدين وابدأ التشغيل بعيدًا عن الجسم',
+              'القرص التالف ينفجر أثناء الدوران\nالشرر يشعل الوقود والسوائل المتسربة في الحادث\nالارتداد عند انحشار القرص'),
+            A('شاحن بطارية الجلخ','Grinder battery charger','كهرباء','',''),
+            A('بطارية ماكينة الجلخ','Grinder battery','كهرباء','',''),
+            A('أسطوانة قطع الحديد (شفرة) 125 مم','Metal cutting disc 125 mm','قطع ونشر',
+              'قرص قطع مخصص للحديد','',
+              'استعمال قرص الحديد على الخرسانة يفتته ويقذف شظايا'),
+            A('أسطوانة قطع الحديد (شفرة)','Metal cutting disc','قطع ونشر','',''),
+            A('جهاز قطع الخواتم وملحقاته','Ring cutter set','إنقاذ',
+              'قص الخاتم من إصبع منتفخ أو محتجز',
+              'ثبّت اليد وابرِد الموضع\nأدخل الواقي بين الخاتم والجلد قبل القص\nاقطع ببطء وتحقق من الحرارة',
+              'القص السريع يسخن المعدن ويحرق الجلد\nشد اليد أثناء القص يزيد الإصابة'),
+            A('طفاية ثاني أكسيد الكربون','CO2 extinguisher','طفايات',
+              'حرائق الكهرباء والأجهزة الدقيقة دون ترك بقايا',
+              'اسحب المسمار الأمني\nامسك القمع من المقبض العازل فقط\nوجّه إلى قاعدة اللهب',
+              'القمع يصل لبرودة شديدة — خطر حروق تجمّد\nيستهلك الأكسجين في المكان المغلق\nلا يبرّد المادة فقد تشتعل مرة أخرى'),
+            A('طفاية بودرة','Dry powder extinguisher','طفايات',
+              'حرائق الفئات A و B و C والتدخل الأول السريع',
+              'اسحب المسمار الأمني\nوجّه إلى قاعدة اللهب\nاضغط المقبض وحرّك أفقيًا',
+              'البودرة تحجب الرؤية فورًا في الأماكن المغلقة\nلا تبرّد المادة فقد تشتعل مرة أخرى'),
+            A('مقص براغي طويل 620 مم','Bolt cutter 620 mm','عدد يدوية',
+              'قص الأقفال والسلاسل والقضبان الرفيعة',
+              'ضع القطعة في عمق الفك لا في طرفه\nاقطع بحركة واحدة حاسمة',
+              'القطعة المقصوصة تطير بقوة — أبعد الوجه\nالقص على أسلاك كهربائية حية خطر صعق'),
+            A('مضخة كهربائية لتعبئة الفوم','Electric foam filling pump','فوم',
+              'تعبئة خزان الفوم في السيارة',
+              'تأكد من نوع الفوم المطابق قبل التعبئة\nاشطف الخط بعد الانتهاء',
+              'خلط أنواع فوم مختلفة يفسد المحلول\nملامسة المركّز للعين والجلد'),
+            A('خرطوم تعبئة الفوم','Foam filling hose','فوم','',''),
+            A('عصا إنقاذ متعددة الاستخدامات','Multi-purpose rescue pole','إنقاذ','',''),
+            A('جهاز تحكم لتسجيل دخول الأفراد مع الإشارة','Entry control board & tags','تنفس',
+              'تسجيل من دخل ومتى، ومتابعة الهواء المتبقي لكل فرد',
+              'سجّل الاسم وضغط الأسطوانة ووقت الدخول\nنبّه الفريق قبل انتهاء الزمن المحسوب بوقت كافٍ للخروج',
+              'الدخول بدون تسجيل يعني ضياع الفريق دون علم أحد بموقعه'),
+            A('معدة فتح أبواب السيارات','Vehicle door opening kit','إنقاذ',
+              'فتح أبواب المركبات المقفلة دون كسر الزجاج',
+              'أدخل الأداة بين الإطار والزجاج بحذر',
+              'الأداة قد تصيب الوسادة الهوائية أو الأسلاك داخل الباب'),
+            A('بلك شحن بطارية السيارة','Battery charging block','كهرباء','',''),
+            A('شنطة معدات متعددة الاستخدامات','Multi-purpose tool bag','عدد يدوية','',''),
+            A('منشار قطع الزجاج مع قلم كسر الزجاج','Glass saw & punch','إنقاذ',
+              'قص الزجاج الأمامي المصفّح وكسر الزجاج الجانبي لفتح منفذ',
+              'غطِّ المصاب قبل بدء القص أو الكسر\nابدأ من الزجاج البعيد عن المصاب\nاقطع الزجاج المصفّح بالمنشار لا بالكسر',
+              'الشظايا تصيب المصاب والطاقم\nكسر الزجاج قرب رأس المصاب يزيد إصابته'),
+            A('مولد الكهرباء','Generator','كهرباء',
+              'تغذية الكشافات والمعدات الكهربائية في الموقع',
+              'شغّله في مكان مفتوح وبعيدًا عن مداخل الهواء\nأرّضه قبل التشغيل\nوزّع الأحمال ولا تتجاوز طاقته',
+              'عادم المولد يطلق أول أكسيد الكربون — ممنوع تشغيله داخل المباني\nالتعبئة والمحرك ساخن تشعل الوقود\nالكيابل المبللة أو المكشوفة تصعق')
+          ]),
+
+          C(2,'الخانة رقم (2) جهة اليمين','Bay 2 — right','bay','يمين',[
+            A('مفك هيدروليك هولمترو 5240','Hydraulic spreader Holmatro 5240','هيدروليك',
+              'فتح الفراغات وتوسيعها ورفع الأجزاء لتحرير المصاب',
+              'ثبّت المركبة وأزل الزجاج قبل العمل\nأدخل الأطراف في نقطة قوية لا في الصاج الرقيق\nافتح تدريجيًا وراقب حركة الجسم',
+              'انفلات الطرف تحت الضغط يقذفه بعنف\nالزيت الهيدروليكي تحت ضغط عالٍ يخترق الجلد\nالعمل قرب أعمدة الوسائد الهوائية غير المفرغة'),
+            A('طقم ملحقات المفك والمقص (رؤوس وسلسلة)','Spreader & cutter accessories','هيدروليك','',''),
+            A('طقم سلسلة شد مع شنكل','Pulling chain set with shackle','رفع وسحب','',
+              'السلسلة المتضررة تنقطع تحت الشد — أخلِ خط الشد'),
+            A('مقص هيدروليك هولمترو 5040','Hydraulic cutter Holmatro 5040','هيدروليك',
+              'قص أعمدة المركبة وفتح مسار لإخراج المصاب',
+              'ثبّت المركبة ونظّم الزجاج قبل القص\nحدد نقاط القص بعيدًا عن أعمدة الوسائد الهوائية والبطارية\nأدخل الشفرة عموديًا على القطعة',
+              'قص عمود فيه وسادة هوائية غير مفرغة يفجّرها\nالقطعة المقصوصة تطير بقوة — تُغطى\nالزيت تحت الضغط يخترق الجلد'),
+            A('مفتاح شد أرطال','Torque wrench','عدد يدوية','',''),
+            A('بوكس رأس المفتاح','Socket set','عدد يدوية','',''),
+            A('علبة شحم','Grease tin','ملحقات','',''),
+            A('مضخة هيدروليك','Hydraulic pump','هيدروليك',
+              'تشغيل المقص والمفك والجيك الهيدروليكي',
+              'افرد الخراطيم كاملة قبل التشغيل\nراقب مستوى الزيت والضغط',
+              'الخرطوم المتضرر ينفجر تحت الضغط العالي'),
+            A('جيك هيدروليك (مكبس) LP 5350','Hydraulic ram LP 5350','هيدروليك',
+              'دفع وإبعاد أجزاء المركبة لتوسيع مساحة الخروج',
+              'ضع القاعدة على نقطة قوية مستقرة\nمُدّ الجيك تدريجيًا وراقب انزلاق القاعدة',
+              'انزلاق القاعدة يقذف الجيك\nالدفع في نقطة ضعيفة يمزق الصاج بدل التحريك'),
+            A('هوز هيدروليك تابع للمضخة','Hydraulic hose','هيدروليك','',''),
+            A('قاعدة تثبيت الجيك','Ram base plate','هيدروليك','',''),
+            A('مشمع وضع المعدات','Equipment tarpaulin','ملحقات',
+              'فرش المعدات عليه في الموقع وترتيبها قرب مكان العمل','',''),
+            A('واقي كبير','Large protection sheet','إنقاذ','',''),
+            A('واقي خاص (أغطية عند الإنقاذ)','Casualty protection cover','إنقاذ',
+              'تغطية المصاب وحمايته من الشظايا والزجاج أثناء القص',
+              'غطِّ المصاب بالكامل قبل بدء أي قص أو كسر',
+              'العمل بدون تغطية المصاب يعرّضه للشظايا والزجاج'),
+            A('واقي عجلة القيادة (المخدة الهوائية)','Airbag/steering wheel restraint','إنقاذ',
+              'تغطية الوسادة الهوائية غير المنفجرة لمنع انفجارها على الطاقم والمصاب',
+              'ركّبه قبل بدء العمل داخل المركبة\nافصل بطارية المركبة إن أمكن',
+              'الوسادة غير المفرغة تنفجر فجأة وتصيب من أمامها'),
+            A('طقم فتح الأبواب HDR50','Door opening set HDR50','إنقاذ','',''),
+            A('مضخة هيدروليك يدوية HTT1250','Manual hydraulic pump HTT1250','هيدروليك',
+              'تشغيل المعدات الهيدروليكية يدويًا عند تعذّر المضخة الآلية','',''),
+            A('طقم خرطوم هيدروليك H04','Hydraulic hose set H04','هيدروليك','',''),
+            A('مقص ومفك بالبطارية GST511','Battery combi tool GST511','هيدروليك',
+              'القص والفتح بدون مضخة أو خراطيم للتدخل السريع',
+              'تأكد من شحن البطارية في بداية الوردية\nنفس قواعد القص: تثبيت المركبة وتجنّب الوسائد الهوائية',
+              'انتهاء الشحن أثناء العملية يوقف الأداة على المصاب — جهّز بطارية احتياط'),
+            A('بطارية احتياط BPA 286','Spare battery BPA 286','هيدروليك','',''),
+            A('شاحن بطارية','Battery charger','كهرباء','',''),
+            A('قواعد هرمية تحذيرية','Warning cones','تأمين موقع',
+              'تحديد منطقة العمل وحماية الفريق من حركة المرور',
+              'ابدأ الوضع من بعيد باتجاه المركبات القادمة\nوسّع المنطقة أكثر مما تظن ضروريًا',
+              'الوقوف خارج المنطقة المؤمّنة أو إدارة الظهر للسير خطر مباشر')
+          ]),
+
+          C(3,'الخانة رقم (3) جهة اليسار','Bay 3 — left','bay','يسار',[
+            A('جهاز تنفس كامل','Full SCBA set','تنفس',
+              'التنفس في الأجواء المسمومة أو منعدمة الأكسجين\nالدخول للأماكن المغلقة والمليئة بالدخان',
+              'افحص ضغط الأسطوانة قبل التحرك\nارتدِ الحمّالة واضبط الأحزمة\nالبس القناع واختبر إحكامه بالشفط\nركّب المنظّم واسمع صوت التدفق\nسجّل وقت الدخول عند ضابط التحكم بالمداخل',
+              'صافرة الإنذار تعني بدء الخروج فورًا لا استمرار العمل\nاللحية تمنع إحكام القناع\nالمجهود العالي يستهلك الهواء أضعاف المعدل'),
+            A('كمامة جهاز التنفس','SCBA face mask','تنفس','',
+              'خدش العدسة يقلل الرؤية\nالقناع غير المحكم يدخل الغازات مباشرة'),
+            A('أسطوانة هواء احتياط مع أغطية','Spare air cylinder with covers','تنفس','',
+              'تُنقل واقفة ومربوطة — كسر الصمام يجعلها تنطلق بعنف'),
+            A('معدة إنقاذ عالمية متعددة الاستخدام','Universal rescue tool','إنقاذ','',''),
+            A('وصلة هواء خطين للأسطوانة','Two-line air manifold','هواء مضغوط','',''),
+            A('خرطوم شفط فوم خارجي','External foam suction hose','فوم','',''),
+            A('مفتاح لفت','Lift key','ملحقات','','')
+          ]),
+
+          C(4,'الخانة رقم (4) جهة اليمين','Bay 4 — right','bay','يمين',[
+            A('خرطوم إرسال 45 مم','Supply/attack hose 45 mm','خراطيم',
+              'خط الهجوم الأساسي للحرائق الصغيرة والمتوسطة والتبريد',
+              'انزل باللفة قرب مكان العمل قبل فردها\nافرد الخط بعيدًا عن الالتواءات\nركّب القارنة على القاذف حتى التعشيق\nافتح المحبس تدريجيًا',
+              'قوة الارتداد تدفع رجل الإطفاء للخلف\nالخرطوم الملتوي قد ينفجر عند رفع الضغط'),
+            A('قاذف ماء R100','Water branch R100','خراطيم',
+              'التحكم في شكل الماء: رذاذ للحماية ومستقيم للاختراق والمدى',
+              'ابدأ دائمًا بوضعية الرذاذ\nحرّك الطوق لضبط الزاوية حسب المسافة\nافتح ببطء وأغلق ببطء',
+              'الفتح المفاجئ يسبب مطرقة مائية\nالماء المستقيم على تيار كهربائي يوصل الصعق\nرذاذ الماء على زيت مشتعل يسبب انفجارًا بخاريًا'),
+            A('ماسورة خلط الفوم','Foam inductor branch','فوم',
+              'خلط مركّز الفوم بالماء وقذف الرغوة',
+              'اضبط النسبة حسب نوع الفوم\nوجّه الرغوة لتنساب على السطح بلطف\nاشطف الخط بالماء بعد الاستعمال',
+              'الرمي المباشر على السائل يبعثره ويوسّع الحريق\nكسر غطاء الرغوة يعيد الاشتعال فورًا'),
+            A('خرطوم الإسعاف مع القاذف','Hose reel with nozzle','خراطيم',
+              'التدخل السريع بخط الإسعاف المطاطي دون فرد الخراطيم',
+              'اسحب الخرطوم من البكرة إلى مكان العمل\nافتح القاذف تدريجيًا\nأعد اللف بانتظام بعد الانتهاء',
+              'الخط المطاطي محدود التدفق — لا يكفي للحرائق الكبيرة\nاللف غير المنتظم ينحشر ويمنع السحب في النداء التالي'),
+            A('يد تعطيف خرطوم الإسعاف','Hose reel winding handle','ملحقات','',''),
+            A('طقم مغسلة','Wash kit','ملحقات','','')
+          ]),
+
+          C(5,'الخانة الخلفية','Rear compartment','bay','خلف',[
+            A('مضخة الماء','Water pump','مصادر ماء',
+              'سحب الماء من الخزان أو المصدر ودفعه في الخطوط بالضغط المطلوب',
+              'تأكد من مصدر الماء قبل التشغيل\nافتح المخارج تدريجيًا وراقب الضغط\nراقب مستوى الخزان باستمرار',
+              'تشغيل المضخة بدون ماء يتلف المانع الميكانيكي خلال ثوانٍ\nرفع الضغط المفاجئ يقذف القاذف من يد رجل الإطفاء'),
+            A('مفتاح هايدرنت أمريكي','US-type hydrant key','عدد يدوية',
+              'فتح وغلق محبس الحنفية الأرضية',
+              'افتح ببطء وبعدد لفّات كامل\nأغلق كليًا بعد انتهاء العملية',
+              'الفتح العنيف يكسر عمود المحبس\nالفتح السريع يسبب مطرقة مائية'),
+            A('مفتاح شد وصل الخراطيم','Hose coupling spanner','عدد يدوية',
+              'شد وفك قارنات الخراطيم',
+              'ضع فكّي المفتاح على أذن القارنة وشد حتى الإحكام',
+              'لا تفك أي قارنة قبل تصفير الضغط في الخط')
+          ])
+
+        ] },
+
+      { id:'at', code:'AT 10160', maker:'Mercedes / Rosenbauer', name:{ar:'إطفاء متوسط',en:'Medium Fire Appliance'},
+        note:{ar:'المركبة الأساسية في المحطة: ماء ورغوة وطاقم كامل ومعدات إنقاذ هيدروليكية.',en:'The station workhorse: water, foam, full crew and hydraulic rescue tools.'},
+        specs:[{k:{ar:'رقم اللوحة',en:'Plate no.'},v:{ar:'10160',en:'10160'}},
+               {k:{ar:'النوع',en:'Make'},v:{ar:'مرسيدس روزنباور',en:'Mercedes / Rosenbauer'}},
+               {k:{ar:'الشكل',en:'Body'},v:{ar:'إطفاء متوسط AT',en:'Medium fire appliance AT'}},
+               {k:{ar:'الموديل',en:'Model year'},v:{ar:'2015',en:'2015'}}],
+        compartments:[
+          cabN('كابينة السائق','Driver cab',[
+            A('جهاز تنفس كامل','Full SCBA set','تنفس',
+              'التنفس في الأجواء المسمومة أو منعدمة الأكسجين\nالدخول للأماكن المغلقة والمليئة بالدخان',
+              'افحص ضغط الأسطوانة قبل التحرك\nارتدِ الحمّالة واضبط الأحزمة\nالبس القناع واختبر إحكامه بالشفط\nركّب المنظّم واسمع صوت التدفق\nسجّل وقت الدخول عند ضابط التحكم بالمداخل',
+              'صافرة الإنذار تعني بدء الخروج فورًا لا استمرار العمل\nاللحية تمنع إحكام القناع\nالمجهود العالي يستهلك الهواء أضعاف المعدل'),
+            A('جهاز كشف الغازات','Gas detector','قياس',
+              'قياس الأكسجين والغازات القابلة للاشتعال وأول أكسيد الكربون قبل الدخول',
+              'شغّله في هواء نظيف حتى تنتهي التهيئة\nأنزله تدريجيًا في الأماكن المنخفضة والمصارف\nانتظر زمن الاستجابة قبل الحكم على المكان',
+              'الغازات الثقيلة تتجمع في المستويات المنخفضة\nقراءة صفرية لا تعني الأمان إن كان الجهاز خارج المعايرة'),
+            A('ساعة توقيت استخدام جهاز التنفس','SCBA entry control board','تنفس',
+              'تسجيل وقت دخول كل فرد ومتابعة الهواء المتبقي له',
+              'سجّل الاسم وضغط الأسطوانة ووقت الدخول\nنبّه الفريق قبل انتهاء الزمن المحسوب بوقت كافٍ للخروج',
+              'الدخول بدون تسجيل يعني ضياع الفريق دون علم أحد بموقعه'),
+            A('كاميرا حرارية مع شاحن','Thermal imaging camera','قياس',
+              'تحديد بؤرة الحريق خلف الجدران\nالبحث عن مصابين في الدخان الكثيف\nمتابعة تدرج الحرارة قبل الاندفاع الحراري',
+              'امسح الغرفة من الأعلى للأسفل بحركة بطيئة\nقارن الفروق الحرارية ولا تعتمد على الرقم وحده',
+              'الكاميرا لا ترى خلف الزجاج ولا داخل الماء\nالاعتماد الكامل عليها يفقد الفريق الإحساس بالاتجاه'),
+            A('ريموت الونش','Winch remote','رفع وسحب',
+              'تشغيل ونش السحب عن بُعد',
+              'ثبّت السيارة قبل السحب\nاربط الخطاف في نقطة تحمّل قوية\nقف من جهة جانبية بعيدًا عن خط السلك',
+              'انقطاع السلك تحت الشد يضرب كالسوط — أخلِ خط السحب\nملامسة السلك أثناء اللف تقطع الأصابع'),
+            A('جهاز موازنة ارتفاع السيارة','Vehicle levelling control','قيادة',
+              'ضبط ارتفاع واتزان المركبة عند الوقوف على أرض غير مستوية','',''),
+            A('مفتاح لفت','Lift key','ملحقات','',''),
+            A('ثلاجة مبرّد','Cooler box','ملحقات',
+              'حفظ ماء الشرب للطاقم — الإرواء جزء من سلامة الفرد أثناء العمل الحراري','',''),
+            A('معدة فتح الأبواب','Door opening tool','إنقاذ',
+              'فتح الأبواب المغلقة بأقل ضرر ممكن',
+              'جرّب الفتح بالطريقة العادية أولًا\nاعمل على نقطة القفل',
+              'الفتح العنيف قد يسقط الباب على الطاقم'),
+            A('معدة فتح أبواب السيارات','Vehicle door opening kit','إنقاذ',
+              'فتح أبواب المركبات المقفلة دون كسر الزجاج',
+              'أدخل الأداة بين الإطار والزجاج بحذر',
+              'الأداة قد تصيب الوسادة الهوائية أو الأسلاك داخل الباب'),
+            A('قطع الخواتم القديمة والجديدة مع ملحقاتها','Seal/ring set with accessories','ملحقات','','')
+          ]),
+
+          cabN('خلف السائق','Behind driver cab',[
+            A('بطانية حريق','Fire blanket','إطفاء',
+              'خنق الحريق الصغير بمنع وصول الأكسجين\nتغطية شخص تشتعل ملابسه',
+              'افردها وأمسك أطرافها كدرع أمام جسمك\nضعها من الأمام للخلف فوق النار\nاتركها حتى تبرد المادة تمامًا',
+              'رفعها مبكرًا يعيد الاشتعال فورًا\nلا تُستعمل على حريق كبير أو ممتد'),
+            A('حبل إنقاذ','Rescue rope','حبال',
+              'الإنزال والرفع والتأمين في عمليات الإنقاذ',
+              'افحص الحبل بصريًا قبل كل استعمال\nاحمِ الحبل من الحواف الحادة\nاستعمل العقد المعتمدة فقط',
+              'الحبل المتضرر أو المحترق ينقطع تحت الحمل\nالاحتكاك بالحافة الحادة يقطعه في ثوانٍ'),
+            A('جهاز تنفس كامل','Full SCBA set','تنفس',
+              'التنفس داخل الأجواء الملوثة أثناء الهجوم والبحث','',
+              'يُفحص الضغط وإحكام القناع قبل كل دخول'),
+            A('سترة إنقاذ مع أغطية واقية','Rescue jacket with covers','وقاية','',''),
+            A('أسطوانة هواء 9 لتر','Air cylinder 9 L','تنفس',
+              'مصدر الهواء الاحتياطي لأجهزة التنفس',
+              'افحص الضغط والصلاحية\nتُنقل وتُخزن مربوطة',
+              'سقوط الأسطوانة وكسر الصمام يجعلها تنطلق بعنف'),
+            A('كشاف يدوي مع شاحن','Handheld torch with charger','إضاءة','',''),
+            A('كشاف بحث ضوئي','Search light','إضاءة',
+              'إضاءة مساحة واسعة أثناء البحث','',''),
+            A('قطع بلاستيكية لتسجيل الأسماء','Name tags','تنفس',
+              'تسجيل أسماء الداخلين على لوحة التحكم بالمداخل','',''),
+            A('حبل إرشاد','Guide line','حبال',
+              'تحديد مسار الرجوع للفريق داخل الدخان الكثيف والأماكن المغلقة',
+              'اربط الطرف الأول عند نقطة الدخول بشيء ثابت\nامسك الحبل بيد واحدة طوال التقدم\nاتبع نفس الحبل عند الخروج',
+              'ترك الحبل داخل الدخان يعني فقدان الاتجاه\nالحبل المتشابك يعيق خروج الفريق المتعب'),
+            A('حبل إرشاد شخصي','Personal guide line','حبال',
+              'ربط الفرد بالحبل الرئيسي أثناء البحث الجانبي','',''),
+            A('كيبل شحن السيارة','Vehicle charging cable','كهرباء','',
+              'التحرك والكيبل موصول يتلف المقبس'),
+            A('شنطة الكاميرا الحرارية مع ملحقاتها','Thermal camera case','قياس','',''),
+            A('دعامية تثبيت العجلة','Wheel chock','تأمين موقع',
+              'منع تحرك المركبة أثناء الوقوف والعمل',
+              'ضعها أمام وخلف الإطار على المنحدرات',
+              'الوقوف على منحدر بدون أسافين يحرّك المركبة أثناء العمل'),
+            A('بلك شحن البطارية','Battery charging block','كهرباء','',''),
+            A('رافعة السيارة (جيك)','Vehicle jack','رفع ودعم','',
+              'ممنوع دخول أي جزء من الجسم تحت سيارة محمولة على الجيك وحده'),
+            A('مفتاح عجل','Wheel wrench','عدد يدوية','',''),
+            A('مثلث تحذير','Warning triangle','تأمين موقع',
+              'تنبيه السائقين لوجود المركبة متوقفة',
+              'البس السترة العاكسة وضعه باتجاه السير القادم بمسافة كافية',
+              'الوقوف داخل مسار المركبات أثناء الوضع'),
+            A('كشاف ضوء تحذيري','Warning beacon','إضاءة','',''),
+            A('شنطة إسعافات أولية','First aid kit','إسعاف',
+              'الإسعاف الأولي للمصابين وللطاقم',
+              'افتحها على سطح نظيف والبس القفازات قبل أي تدخل','',''),
+            A('وصلة تعبئة الهواء','Air filling adaptor','هواء مضغوط','',''),
+            A('سترات تحذيرية (شياحات)','Hi-vis vests','وقاية',
+              'إظهار الفرد لسائقي المركبات أثناء العمل على الطريق',
+              'تُلبس فوق البدلة قبل النزول للطريق',
+              'العمل على الطريق بدون سترة عاكسة خطر مباشر'),
+            A('طربال معدات','Equipment tarpaulin','ملحقات',
+              'فرش المعدات عليه في الموقع','',''),
+            A('قفص أحمر','Red cage/box','ملحقات','','')
+          ]),
+
+          C(1,'الخانة رقم (1) جهة اليسار','Bay 1 — left','bay','يسار',[
+            A('خرطوم شفط','Suction hose','مصادر ماء',
+              'سحب الماء من مصدر مفتوح إلى المضخة',
+              'ركّب المصفاة في الطرف الغاطس\nأحكم القارنات بمفتاح الشد\nاغمر الطرف بالكامل تحت الماء',
+              'الخرطوم جامد وثقيل — يُحمل بشخصين\nدخول الهواء من الوصلات يفقد المضخة الشفط'),
+            A('شنيور','Drill','قطع ونشر','',''),
+            A('شنيور صغير','Small drill','قطع ونشر','',''),
+            A('سترة احتياط','Spare tunic','وقاية','',''),
+            A('أقراص حديدية','Steel discs','قطع ونشر','',''),
+            A('واقي عجلة القيادة','Steering wheel protector','إنقاذ',
+              'تغطية مقود المركبة وحماية المصاب أثناء العمل','',''),
+            A('كيبل استيل','Steel cable','رفع وسحب','',
+              'الأسلاك المقطوعة تجرح اليد — يُلبس قفاز جلد'),
+            A('كيبل قلص كتان','Webbing sling cable','رفع وسحب','',''),
+            A('سلسلة','Chain','رفع وسحب','',
+              'السلسلة المتضررة تنقطع تحت الشد'),
+            A('رؤوس مفك','Spreader tips','هيدروليك','',''),
+            A('وصلات مخدات هوائية','Airbag connectors','رفع ودعم','',''),
+            A('كشاف بحث','Search light','إضاءة','',''),
+            A('قواعد تثبيت السيارة','Stabilising blocks','رفع ودعم',
+              'تثبيت المركبة قبل بدء القص والفتح',
+              'ثبّت المركبة أولًا مهما بدت مستقرة',
+              'المركبة غير المثبّتة تتحرك فجأة على المصاب أو الطاقم'),
+            A('معدة كسر الزجاج مع شفرة احتياط','Glass breaking tool + spare blade','إنقاذ',
+              'كسر زجاج المركبة لفتح منفذ للمصاب',
+              'ابدأ من الزجاج البعيد عن المصاب\nغطِّ المصاب قبل الكسر',
+              'الزجاج الأمامي مصفّح يحتاج منشارًا لا كسرًا\nالشظايا تصيب المصاب والطاقم'),
+            A('جيك هيدروليك L TR4340C','Hydraulic ram L TR4340C','هيدروليك',
+              'دفع وإبعاد أجزاء المركبة لتوسيع مساحة الخروج',
+              'ضع القاعدة على نقطة قوية مستقرة\nمُدّ الجيك تدريجيًا وراقب انزلاق القاعدة',
+              'انزلاق القاعدة يقذف الجيك\nالدفع في نقطة ضعيفة يمزق الصاج بدل التحريك'),
+            A('جيك هيدروليك L TR4350C','Hydraulic ram L TR4350C','هيدروليك','',''),
+            A('جيك هيدروليك T RA4332C','Hydraulic ram T RA4332C','هيدروليك','',''),
+            A('معدة تثبيت السيارة','Vehicle stabilisation kit','رفع ودعم','',''),
+            A('بلك شحن مع ملحقات الكشاف','Charging block with light accessories','كهرباء','',''),
+            A('حمالة كتان','Webbing sling','رفع وسحب','',
+              'الحزام المقطوع أو المحترق ينقطع تحت الحمل'),
+            A('فلتر ورقي','Paper filter','ملحقات','',''),
+            A('جركل تعبئة','Fuel jerrycan','وقود',
+              'وقود المناشير والمولد',
+              'التعبئة والمحرك متوقف وبارد\nامسح أي انسكاب فورًا',
+              'أبخرة البنزين تشتعل من الشرر أو السطح الساخن'),
+            A('جالون زيت السلسلة','Chain oil','قطع ونشر','',
+              'العمل بدون زيت يتلف السلسلة ويزيد خطر الارتداد'),
+            A('منشار ميكانيكي بنزين مع سلسلة احتياط','Petrol chainsaw + spare chain','قطع ونشر',
+              'قص الأخشاب والأبواب وفتح المسارات',
+              'افحص شد السلسلة والزيت قبل التشغيل\nقف بثبات وامسك بكلتا اليدين\nلا تقطع فوق مستوى الكتف',
+              'الارتداد من طرف السيف يقذف المنشار نحو الوجه\nالغصن تحت الشد يقفز عند القطع'),
+            A('أزميل','Chisel','عدد يدوية','',''),
+            A('صندوق كهرباء (أدوات)','Electrical tool box','كهرباء','',''),
+            A('شنطة أدوات','Tool bag','عدد يدوية','',''),
+            A('صندوق عدة الإطفائي','Firefighter tool box','عدد يدوية','',''),
+            A('غطاء مجاري','Drain cover','مواد خطرة',
+              'سد فتحات المجاري لمنع دخول الوقود أو المواد المتسربة إليها',
+              'ضعه قبل انتشار الانسكاب باتجاه المصرف',
+              'دخول الوقود للمجاري يحوّل الحادث إلى خطر انفجار ممتد'),
+            A('مقص ومفك هيدروليك','Hydraulic cutter & spreader','هيدروليك',
+              'قص أعمدة المركبة وفتح مسار لإخراج المصاب',
+              'ثبّت المركبة ونظّم الزجاج قبل القص\nابتعد عن أعمدة الوسائد الهوائية والبطارية\nأدخل الشفرة عموديًا على القطعة',
+              'قص عمود فيه وسادة هوائية غير مفرغة يفجّرها\nالقطعة المقصوصة تطير بقوة\nالزيت تحت الضغط يخترق الجلد'),
+            A('مضخة هيدروليك','Hydraulic pump','هيدروليك',
+              'تشغيل المقص والمفك والجيك',
+              'افرد الخراطيم كاملة قبل التشغيل\nراقب مستوى الزيت',
+              'الخرطوم المتضرر ينفجر تحت الضغط العالي'),
+            A('مفتاح براغي','Wrench','عدد يدوية','',''),
+            A('فأس صغير','Small axe','عدد يدوية','',''),
+            A('عتلة حديد','Pry bar','عدد يدوية',
+              'الفتح والرفع في الفراغات الضيقة',
+              'استعمل نقطة ارتكاز ثابتة وادفع في اتجاه آمن',
+              'انزلاق العتلة تحت القوة يسبب سقوطًا وإصابات'),
+            A('فأس خشب','Wood axe','عدد يدوية','',''),
+            A('معدة كسر الزجاج (قلم)','Glass punch','إنقاذ','',''),
+            A('سكين قطع الأحزمة','Belt cutter knife','إنقاذ',
+              'قص حزام الأمان لتحرير المصاب',
+              'أدخل الحزام في فتحة الشفرة واسحب بحركة واحدة\nثبّت رأس المصاب أثناء القص',
+              'الشفرة مكشوفة — تُحمل في غمدها'),
+            A('مطرقة كسر','Sledgehammer','عدد يدوية',
+              'كسر الخرسانة والأبواب والفتح العنيف',
+              'أبعد المساعدين عن مدى الضربة',
+              'الشظايا تطير عند ضرب الخرسانة — واقي وجه إلزامي'),
+            A('منشار يدوي مع شفرة احتياط','Hand saw + spare blade','عدد يدوية','',''),
+            A('شنكل حديد D','D-shackle','رفع وسحب','',
+              'الشنكل بلا قفل أمان ينفلت تحت الحمل'),
+            A('إطارات ومعدات','Frames & fittings','ملحقات','',''),
+            A('فأس حريق','Fire axe','عدد يدوية',
+              'الفتح والكسر في عمليات الإطفاء والدخول',
+              'اضرب بعيدًا عن الجسم ومن وضعية متزنة',
+              'الضرب على أسلاك أو أنابيب مخفية داخل الجدار'),
+            A('قاطع حزام','Seat belt cutter','إنقاذ','',''),
+            A('مفتاح مجاري','Drain key','عدد يدوية','','')
+          ]),
+
+          C(2,'الخانة رقم (2) جهة اليمين','Bay 2 — right','bay','يمين',[
+            A('فلتر كمامة','Mask filter','وقاية',
+              'ترشيح الهواء عبر الكمامة عند وجود أكسجين كافٍ',
+              'تأكد من نوع الفلتر المناسب للمادة\nافحص تاريخ الصلاحية قبل التركيب',
+              'الفلتر لا يصلح في الأجواء منعدمة الأكسجين — يلزم جهاز تنفس مستقل'),
+            A('منشار كهربائي','Electric saw','قطع ونشر',
+              'القص داخل المباني حيث لا يصلح محرك البنزين',
+              'تأكد من سلامة الكيبل والمصدر\nثبّت القطعة قبل القص',
+              'الكيبل في الماء أو تحت الأنقاض يصعق\nالشظايا وارتداد النصل'),
+            A('عصا مسك الثعبان','Snake catching pole','تدخلات خاصة',
+              'الإمساك بالثعابين والزواحف وإبعادها بأمان',
+              'اقترب من مسافة آمنة وخلف رأس الحيوان\nثبّت الرأس أولًا ثم ضعه في الوعاء المخصص',
+              'اللدغة قد تكون سامة — يُطلب الإسعاف فورًا\nلا تمسك الحيوان باليد إطلاقًا'),
+            A('خراطيم هيدروليك ملوّنة','Coloured hydraulic hoses','هيدروليك',
+              'توصيل الزيت من المضخة للمعدات — لكل لون خط مخصص',
+              'التزم مطابقة الألوان عند التوصيل\nافرد الخرطوم كاملًا قبل التشغيل',
+              'التوصيل الخاطئ يعكس حركة الأداة ويسبب إصابة'),
+            A('كمامة فلتر','Filter mask','وقاية','',''),
+            A('ملحقات المخدات الهوائية','Airbag accessories','رفع ودعم','',''),
+            A('أسطوانة هواء','Air cylinder','هواء مضغوط',
+              'مصدر الضغط لتشغيل وسائد الرفع ومعدات الهواء','',
+              'تُنقل واقفة ومربوطة — كسر الصمام يجعلها تنطلق بعنف'),
+            A('ماسورة هايدرنت','Hydrant standpipe','مصادر ماء',
+              'التوصيل بالحنفية الأرضية لسحب الماء',
+              'نظّف فتحة الحنفية قبل التركيب\nركّب الماسورة وأحكمها ثم افتح المحبس ببطء',
+              'الفتح السريع يسبب مطرقة مائية تقذف الخراطيم'),
+            A('مفتاح هايدرنت','Hydrant key','عدد يدوية',
+              'فتح وغلق محبس الحنفية الأرضية',
+              'افتح ببطء وبعدد لفّات كامل وأغلق كليًا بعد العملية',
+              'الفتح العنيف يكسر عمود المحبس'),
+            A('عادم المولد','Generator exhaust','كهرباء',
+              'إخراج عادم المولد بعيدًا عن منطقة العمل','',''),
+            A('مفتاح تشغيل المضخة الغاطسة','Submersible pump switch','مصادر ماء','',''),
+            A('عصا T أرضية','T-bar / earth rod','كهرباء','',''),
+            A('مولد كهرباء','Generator','كهرباء',
+              'تغذية الكشافات والمعدات الكهربائية في الموقع',
+              'شغّله في مكان مفتوح\nأرّضه قبل التشغيل\nوزّع الأحمال ولا تتجاوز طاقته',
+              'عادم المولد يطلق أول أكسيد الكربون — ممنوع تشغيله داخل المباني\nالتعبئة والمحرك ساخن تشعل الوقود'),
+            A('مضخة غاطسة كهربائية','Electric submersible pump','مصادر ماء',
+              'سحب المياه من الأقبية والمواقف المغمورة',
+              'أنزلها بالحبل لا بالكيبل\nتأكد من التأريض وقاطع التسريب قبل التشغيل\nأبقِ المصفاة بعيدة عن الطين',
+              'الكهرباء والماء معًا — أي عزل تالف يصعق من في الماء\nالتشغيل بلا ماء يحرق المضخة'),
+            A('جركل بنزين','Petrol jerrycan','وقود','',
+              'أبخرة البنزين تشتعل من الشرر أو السطح الساخن'),
+            A('جلخ متعدد الأنواع','Angle grinder','قطع ونشر',
+              'الجلخ وقص الحديد في المساحات الضيقة',
+              'ركّب الغطاء الواقي دائمًا وامسك بكلتا اليدين',
+              'القرص التالف ينفجر أثناء الدوران\nالشرر يشعل الوقود المتسرب'),
+            A('نظارة واقية','Safety goggles','وقاية',
+              'حماية العين من الشظايا والغبار والرذاذ','',''),
+            A('كشاف إضاءة','Scene light','إضاءة','',
+              'السطح الأمامي يسخن — لا يُلمس بعد التشغيل'),
+            A('حامل كشاف','Light stand','إضاءة','',''),
+            A('صندوق كهرباء (محوّل)','Transformer box','كهرباء','',''),
+            A('بكرة كهرباء 3PH','Cable reel 3-phase','كهرباء','',
+              'افرد الكيبل كاملًا قبل التحميل — الكيبل الملفوف يسخن ويحترق'),
+            A('بكرة كهرباء SINGLE','Cable reel single-phase','كهرباء','',''),
+            A('قاعدة كشاف','Light base','إضاءة','',''),
+            A('أسطوانة هواء (صفراء)','Air cylinder (yellow)','هواء مضغوط','',''),
+            A('محقان بنزين','Petrol burner/heater','ملحقات','',''),
+            A('مخدات هوائية 8 بار','Lifting air bags 8 bar','رفع ودعم',
+              'رفع الأجسام الثقيلة لتحرير مصاب محتجز تحتها',
+              'ضع الوسادة على سطح مستوٍ وصلب\nارفع قليلًا ثم ادعم فورًا وكرر',
+              'الرفع بدون دعامات ينزلق الحمل فجأة\nتكديس أكثر من وسادتين يفقد الاتزان\nالحواف الحادة تقطع الوسادة تحت الضغط'),
+            A('منظّم هواء مع ساعة','Air regulator with gauge','هواء مضغوط','',''),
+            A('وصلة هواء بين أسطوانتين','Cylinder-to-cylinder air line','هواء مضغوط','',''),
+            A('مفتاح منهول','Manhole key','عدد يدوية','','')
+          ]),
+
+          C(3,'الخانة رقم (3) جهة اليسار','Bay 3 — left','bay','يسار',[
+            A('خرطوم حريق 45 مم','Attack hose 45 mm','خراطيم',
+              'خط الهجوم الأساسي للحرائق الصغيرة والمتوسطة\nتبريد الأسطح والمعرضات',
+              'انزل باللفة قرب مكان العمل قبل فردها\nافرد الخط بعيدًا عن الالتواءات\nركّب القارنة على القاذف حتى التعشيق\nافتح المحبس تدريجيًا',
+              'قوة الارتداد تدفع رجل الإطفاء للخلف\nالخرطوم الملتوي قد ينفجر عند رفع الضغط'),
+            A('خرطوم حريق 65 مم','Supply hose 65 mm','خراطيم',
+              'الخط الرئيسي ذو التدفق الأعلى والتغذية من الحنفية أو مركبة أخرى',
+              'يُفرد بشخصين لثقله\nإن استُعمل كخط هجوم فيلزم رجلان على القاذف',
+              'الارتداد أعلى بكثير من خط 45 مم'),
+            A('دعاميات تثبيت','Stabilising supports','رفع ودعم','','')
+          ]),
+
+          C(4,'الخانة رقم (4) جهة اليمين','Bay 4 — right','bay','يمين',[
+            A('قاذف فوم مع ساعة','Foam branch with gauge','فوم',
+              'قذف الرغوة على السوائل المشتعلة وتكوين غطاء يمنع الأبخرة',
+              'وجّه الرغوة لتنساب على السطح بلطف أو على جدار الوعاء\nحافظ على غطاء الرغوة حتى انتهاء العملية',
+              'الرمي المباشر على السائل يبعثره ويوسّع الحريق\nكسر غطاء الرغوة يعيد الاشتعال فورًا'),
+            A('خلاط فوم خارجي','External foam inductor','فوم',
+              'خلط مركّز الفوم مع الماء بالنسبة المطلوبة',
+              'اضبط النسبة حسب نوع الفوم والحريق\nاشطف الخط بالماء بعد الاستعمال',
+              'النسبة الخاطئة تنتج رغوة ضعيفة لا تغطي السطح'),
+            A('خرطوم شفط فوم','Foam pick-up hose','فوم',
+              'سحب مركّز الفوم من العبوة إلى الخط',
+              'أدخل الطرف في العبوة حتى القاع',
+              'بقاء المركّز في الخط يسبب تآكلًا وانسدادًا\nملامسة المركّز للعين والجلد'),
+            A('جراكل فوم','Foam concentrate jerrycans','فوم','',''),
+            A('مروحة طرد الدخان','Smoke ejection fan','تهوية',
+              'طرد الدخان والحرارة من المبنى وتحسين الرؤية',
+              'حدد مخرج الهواء قبل التشغيل\nضعها على مسافة مناسبة من المدخل\nنسّق مع الفريق الداخلي قبل بدء التهوية',
+              'التهوية الخاطئة تدفع النار نحو الفرق أو نحو أماكن سليمة\nعادم المروحة العاملة بالبنزين سام'),
+            A('مقسم (3) رؤوس','Dividing breeching, 3 outlets','خراطيم',
+              'تقسيم خط وارد إلى عدة خطوط عمل',
+              'ثبّته على الأرض قرب الفرق\nأغلق الفالفات قبل طلب الماء وافتح تدريجيًا',
+              'فتح كل الخطوط معًا يُسقط الضغط على الجميع'),
+            A('دعاميات تثبيت السيارة','Vehicle stabilisers','رفع ودعم','','')
+          ]),
+
+          C(5,'الخانة رقم (5) جهة اليسار','Bay 5 — left','bay','يسار',[
+            A('خرطوم حريق إرسال كبير','Large supply hose','خراطيم','',''),
+            A('قاذف ماء 101','Water branch 101','خراطيم',
+              'التحكم في شكل الماء: رذاذ للحماية ومستقيم للاختراق',
+              'ابدأ بوضعية الرذاذ\nافتح ببطء وأغلق ببطء',
+              'الفتح المفاجئ يسبب مطرقة مائية\nالماء المستقيم على تيار كهربائي يوصل الصعق'),
+            A('مرشّح تصفية','Filter/strainer','مصادر ماء','',''),
+            A('مفتاح ماسورة الهايدرنت','Standpipe key','عدد يدوية','',''),
+            A('مفتاح شد','Hose spanner','عدد يدوية',
+              'شد وفك القارنات',
+              'ضع فكّي المفتاح على أذن القارنة وشد حتى الإحكام',
+              'لا تفك أي قارنة قبل تصفير الضغط في الخط'),
+            A('مصفاة شفط','Suction strainer','مصادر ماء',
+              'منع دخول الأوساخ والحصى إلى المضخة',
+              'تُركّب في نهاية خرطوم الشفط قبل الغمر\nأبقها بعيدة عن القاع',
+              'الشفط بدون مصفاة يتلف دفّاعة المضخة'),
+            A('مقسم (3) رؤوس مع فالف','Dividing breeching with valves','خراطيم','',''),
+            A('وصلة ماء','Water adaptor','ملحقات','',''),
+            A('وصلة أنثى نظام بريطاني','Female adaptor, BS','ملحقات','',
+              'التركيب غير المحكم ينفصل تحت الضغط'),
+            A('مقسم (3) رؤوس مع ولف تحكم','Dividing breeching with control','خراطيم','',''),
+            A('مفاتيح السلم للطوارئ','Ladder emergency keys','سلالم','',''),
+            A('قاذف ماء','Water branch','خراطيم','',''),
+            A('جامع رؤوس','Collecting head','مصادر ماء',
+              'جمع أكثر من خط وارد في مدخل واحد للمضخة','',''),
+            A('حبل خراطيم','Hose rope','حبال',
+              'رفع الخراطيم للطوابق العليا وربطها',
+              'اربط الخرطوم بالعقدة المعتمدة قبل الرفع\nنبّه من في الأسفل قبل الرفع أو الإنزال',
+              'سقوط الخرطوم المرفوع يصيب من تحته'),
+            A('ريموت السلم','Ladder remote','سلالم','',''),
+            A('وصلة (ماسورة) فوم 102','Foam adaptor 102','فوم','',''),
+            A('أحزمة خراطيم','Hose straps','ملحقات','',''),
+            A('خرطوم تعبئة الخزان','Tank filling hose','مصادر ماء',
+              'تعبئة خزان السيارة من الحنفية أو من مركبة أخرى','','')
+          ]),
+
+          C(6,'الخانة رقم (6) جهة اليمين','Bay 6 — right','bay','يمين',[
+            A('قاذف خرطوم الإسعاف','Hose reel nozzle','خراطيم',
+              'التدخل السريع بخط الإسعاف المطاطي دون فرد الخراطيم',
+              'اسحب الخرطوم من البكرة إلى مكان العمل\nافتح القاذف تدريجيًا\nأعد اللف بانتظام بعد الانتهاء',
+              'الخط المطاطي محدود التدفق — لا يكفي للحرائق الكبيرة'),
+            A('وصلة فوم','Foam adaptor','فوم','',''),
+            A('طفاية بودرة','Dry powder extinguisher','طفايات',
+              'حرائق الفئات A و B و C والتدخل الأول السريع',
+              'اسحب المسمار الأمني\nوجّه إلى قاعدة اللهب\nاضغط المقبض وحرّك أفقيًا',
+              'البودرة تحجب الرؤية فورًا في الأماكن المغلقة\nلا تبرّد المادة فقد تشتعل مرة أخرى'),
+            A('طفاية ثاني أكسيد الكربون','CO2 extinguisher','طفايات',
+              'حرائق الكهرباء والسوائل في الأماكن التي لا تتحمل بقايا البودرة',
+              'امسك القمع من المقبض العازل فقط\nوجّه إلى قاعدة اللهب',
+              'القمع يصل لبرودة شديدة — خطر حروق تجمّد\nيستهلك الأكسجين في المكان المغلق'),
+            A('طفاية فوم','Foam extinguisher','طفايات',
+              'حرائق السوائل القابلة للاشتعال والمواد الصلبة',
+              'وجّه على جدار الوعاء ليتدفق الفوم فوق السائل',
+              'الرمي المباشر يبعثر السائل المشتعل\nلا تُستعمل على تيار كهربائي حي'),
+            A('جركل فوم','Foam jerrycan','فوم','',''),
+            A('صابون سائل','Liquid soap','ملحقات','',''),
+            A('مقسم (3) رؤوس','Dividing breeching, 3 outlets','خراطيم','',''),
+            A('مفتاح خرطوم الإسعاف','Hose reel spanner','عدد يدوية','','')
+          ]),
+
+          C(7,'الخانة الخلفية — المضخة','Rear compartment — pump','bay','خلف',[
+            A('مضخة الماء','Main water pump','مصادر ماء',
+              'سحب الماء من الخزان أو المصدر ودفعه في الخطوط بالضغط المطلوب',
+              'تأكد من مصدر الماء قبل التشغيل\nافتح المخارج تدريجيًا وراقب الضغط\nراقب مستوى الخزان باستمرار',
+              'تشغيل المضخة بدون ماء يتلف المانع الميكانيكي خلال ثوانٍ\nرفع الضغط المفاجئ يقذف القاذف من يد رجل الإطفاء'),
+            A('جهاز تحكم الإضاءة (ريموت)','Lighting remote control','إضاءة','',''),
+            A('مفتاح شفط','Suction control key','مصادر ماء','','')
+          ]),
+
+          C(8,'أعلى السيارة','Roof','bay','أعلى',[
+            A('هوك سحب وقطع','Pike pole / hook','عدد يدوية',
+              'سحب الأسقف والألواح وكشف الحريق المختبئ خلفها',
+              'اسحب باتجاه بعيد عن الجسم\nراقب سقوط المواد من الأعلى',
+              'سقوط أجزاء مشتعلة على من تحت\nالسحب فوق الرأس يجهد الكتف ويفقد التوازن'),
+            A('سلم صعود 14 متر','Extension ladder 14 m','سلالم',
+              'الصعود للطوابق العليا والأسطح',
+              'يُنزل ويُحمل بشخصين\nقاعدة على أرض صلبة بزاوية 75 درجة تقريبًا\nيثبّت شخص أسفل السلم أثناء الصعود\nاصعد ووجهك إلى السلم',
+              'ملامسة أسلاك الكهرباء العلوية\nالزاوية الخاطئة تُزحلق السلم\nتجاوز عدد الأشخاص المسموح'),
+            A('سلم حريق 8 متر','Ladder 8 m','سلالم','',''),
+            A('دليل تعليق خرطوم الإسعاف','Hose reel guide','ملحقات','',''),
+            A('كباري (جسور) للخراطيم','Hose bridges/ramps','ملحقات',
+              'حماية الخراطيم الممدودة على الطريق من مرور المركبات',
+              'ضعها قبل السماح لأي مركبة بالعبور فوق الخط',
+              'مرور مركبة على خرطوم غير محمي يقطعه ويقطع الماء عن الفريق'),
+            A('مضخة فوم مع خرطوم','Foam pump with hose','فوم','',''),
+            A('شوكة رأسية','Vertical fork/spanner','عدد يدوية','',''),
+            A('شوكة أفقية','Horizontal fork/spanner','عدد يدوية','',''),
+            A('كيس بودرة لإزالة الزيوت','Oil absorbent powder','مواد',
+              'امتصاص انسكابات الزيت والوقود ومنع الانزلاق',
+              'انثرها على كامل البقعة واتركها تمتص ثم اكنسها\nاجمع الناتج في وعاء مخصص',
+              'البقعة تبقى زلقة قبل الكنس\nالبودرة المشبعة بالوقود تبقى قابلة للاشتعال'),
+            A('خرطوم شفط خارجي للفوم','External foam suction hose','فوم','',''),
+            A('قلص كتان','Webbing sling','رفع وسحب','',''),
+            A('قاذف مونيتور','Roof monitor','خراطيم',
+              'رمي كمية ماء كبيرة لمسافة بعيدة من أعلى السيارة\nتبريد الأسطح والصهاريج المجاورة',
+              'ثبّت السيارة وشغّل المضخة\nوجّه المونيتر قبل فتح الماء\nافتح تدريجيًا وحرّك ببطء',
+              'قوة الاندفاع تحرك المونيتر فجأة إن تُرك\nالرمي المباشر قد يُسقط أشخاصًا\nيستهلك ماء الخزان في دقائق')
+          ])
+
+        ] },
+
+      { id:'tanker', code:'WT 10172', maker:'Rosenbauer', name:{ar:'تنكر ماء',en:'Water Tanker'},
+        note:{ar:'صهريج إطفاء — مصدر الماء الاحتياطي وتغذية باقي المركبات في المناطق البعيدة عن شبكة الحنفيات.',en:'Water tanker: reserve supply and feed for other appliances away from hydrants.'},
+        specs:[{k:{ar:'رقم اللوحة',en:'Plate no.'},v:{ar:'10172',en:'10172'}},
+               {k:{ar:'النوع',en:'Make'},v:{ar:'روزنباور',en:'Rosenbauer'}},
+               {k:{ar:'الشكل',en:'Body'},v:{ar:'صهريج إطفاء',en:'Fire water tanker'}},
+               {k:{ar:'الموديل',en:'Model year'},v:{ar:'2016',en:'2016'}}],
+        compartments:[
+          cab('كابينة السائق','Driver cab',[
+            N(1,E('جيك (رافعة)','Hydraulic jack','عدد ومساعدات',
+              'رفع السيارة عند تغيير الإطار أو الفحص أسفلها',
+              'أوقف السيارة على أرض صلبة مستوية واسحب فرامل اليد\nضع أسافين تحت الإطارات الأخرى\nضع الجيك تحت نقطة الرفع المخصصة في الشاسيه\nارفع تدريجيًا حتى يرتفع الإطار قليلًا\nضع الدعامة الثابتة قبل أي عمل تحت السيارة',
+              'ممنوع دخول أي جزء من الجسم تحت سيارة محمولة على الجيك وحده\nالرفع على أرض رملية أو مائلة يُسقط السيارة\nوزن الصهريج ممتلئًا أكبر بكثير — تحقق من طاقة الجيك',
+              'في المستودع')),
+            N(1,E('مثلث مروري','Warning triangle','تأمين موقع',
+              'تنبيه السائقين القادمين لوجود المركبة متوقفة في الطريق',
+              'ضعه خلف المركبة باتجاه السير القادم\nزد المسافة على الطرق السريعة\nالبس السترة العاكسة قبل النزول',
+              'الوقوف داخل مسار المركبات أثناء الوضع\nالمثلث القريب جدًا لا يعطي السائق وقتًا للتفاعل')),
+            N(1,E('كشاف مروري أسود','Traffic wand','إضاءة',
+              'توجيه حركة المرور ليلًا حول موقع الحادث',
+              'أشر بحركات واسعة وبطيئة وواضحة\nقف في مكان يراك فيه السائق مبكرًا وخارج مسار العجلات',
+              'إدارة الظهر للسير القادم\nالاعتماد على الكشاف وحده دون سترة عاكسة')),
+            N(1,E('وصلة هواء مع ساعة والمنظّم','Air line with gauge & regulator','هواء مضغوط',
+              'تعبئة هواء الإطارات من نظام الهواء في السيارة',
+              'أوصل الوصلة بمخرج الهواء في السيارة\nاضبط المنظّم على ضغط الإطار المطلوب\nراقب الساعة أثناء التعبئة ولا تتركها',
+              'الضغط الزائد يفجّر الإطار\nطرف الخرطوم الحر يتحرك بعنف عند انفلات الوصلة',
+              '', 'الضغط: حسب المدوّن على جدار الإطار')),
+            N(1,E('شنطة إسعافات أولية','First aid kit','إسعاف',
+              'الإسعاف الأولي للمصابين ولأفراد الطاقم',
+              'افتحها على سطح نظيف\nالبس القفازات قبل أي تدخل\nعوّض الناقص وأعد الترتيب بعد كل استعمال',
+              'استعمال ضمادات ملوثة أو منتهية الصلاحية\nتجاوز حدود الإسعاف الأولي بدل نقل المصاب',
+              'تُفحص صلاحية المحتويات دوريًا')),
+            N(1,E('كيبل شحن السيارات','Jump start cables','كهرباء',
+              'تشغيل مركبة بطاريتها فارغة من بطارية مركبة أخرى',
+              'أوقف المحركين\nوصّل الأحمر بالقطب الموجب في البطاريتين\nوصّل الأسود بالسالب ثم بنقطة معدنية بعيدة عن البطارية\nشغّل المركبة السليمة ثم المركبة الفارغة\nافصل بالترتيب العكسي',
+              'عكس الأقطاب يسبب شررًا وقد يفجّر البطارية\nغاز الهيدروجين المتصاعد قابل للاشتعال — ممنوع التدخين أو الشرر\nملامسة الملقطين لبعضهما أثناء التوصيل')),
+            N(1,E('معدات بنشر','Tyre puncture repair kit','عدد ومساعدات',
+              'إصلاح ثقب الإطار إصلاحًا مؤقتًا حتى الوصول للورشة',
+              'حدد مكان الثقب ونظّفه\nاتبع تعليمات العدّة في السد ثم أعد ضبط ضغط الإطار',
+              'الإصلاح المؤقت لا يُعتمد عليه في القيادة السريعة أو الحمولة الكاملة',
+              'في المستودع')),
+            N(2,E('كشاف يدوي أسود','Handheld torch','إضاءة',
+              'الإضاءة داخل الأماكن المظلمة وأثناء الفحص الليلي',
+              'افحص الشحن في بداية كل وردية\nثبّته على الملابس أو الخوذة عند الحاجة ليد حرة',
+              'في الأجواء القابلة للاشتعال يُستعمل كشاف مانع للانفجار فقط')),
+            N(1,E('شفّاطة','Suction/siphon pump','عدد ومساعدات',
+              'سحب السوائل من الوعاء عند الحاجة',
+              'استعملها حسب التعليمات المعتمدة في المحطة\nلا تستعملها لسوائل غير المخصصة لها',
+              'ملامسة الوقود أو الزيت للجلد والعين\nأبخرة الوقود قابلة للاشتعال',
+              'أكّد الاستعمال المعتمد لهذه المعدة مع ضابط المحطة'))
+          ]),
+
+          C(1,'الخانة الخلفية جهة اليمين','Rear right compartment','bay','يمين',[
+            N(2,BRANCH()),
+            N(7,HOSE45()),
+            N(2,PWDEXT()),
+            N(1,E('طفاية ثاني أكسيد الكربون','CO2 extinguisher','طفايات',
+              'حرائق الكهرباء والسوائل القابلة للاشتعال\nالأماكن التي لا تتحمل بقايا البودرة كغرف الأجهزة',
+              'اسحب المسمار الأمني\nامسك القمع من المقبض العازل فقط\nوجّه إلى قاعدة اللهب واضغط المقبض',
+              'القمع يصل لبرودة شديدة — خطر حروق تجمّد عند مسكه من غير المقبض\nيستهلك الأكسجين في المكان المغلق — خطر اختناق\nلا يبرّد المادة فقد تشتعل مرة أخرى',
+              '', 'الوزن: 5 كغ\nالفئات: B · C وحرائق الكهرباء\nالمدى: 1 – 2 م')),
+            N(1,E('طفاية فوم','Foam extinguisher','طفايات',
+              'حرائق السوائل القابلة للاشتعال (الفئة B) والمواد الصلبة (الفئة A)',
+              'اسحب المسمار الأمني\nوجّه على جدار الوعاء أو سطح خلفي ليتدفق الفوم فوق السائل\nلا ترمِ مباشرة على سطح السائل',
+              'الرمي المباشر يبعثر السائل المشتعل ويوسّع الحريق\nلا تُستعمل على تيار كهربائي حي',
+              '', 'الوزن: 9 لتر\nالفئات: A · B')),
+            N(1,E('ماسورة فوم','Foam branch','فوم',
+              'خلط الهواء بمحلول الفوم وقذفه كرغوة على السائل المشتعل',
+              'ركّبها في نهاية خط الماء المحمّل بالفوم\nوجّه الرغوة لتنساب على السطح بلطف\nحافظ على غطاء الرغوة حتى انتهاء العملية',
+              'كسر غطاء الرغوة يعيد الاشتعال فورًا\nاستعمال الماء المستقيم بعدها يهدم الغطاء')),
+            N(2,DIV3()),
+            N(1,E('ماسورة هايدرنت','Hydrant standpipe','مصادر ماء',
+              'التوصيل بالحنفية الأرضية لسحب الماء منها',
+              'افتح غطاء الحنفية ونظّف الفتحة من الأوساخ\nركّب الماسورة وأدرها حتى الإحكام\nأوصل الخراطيم أولًا ثم افتح المحبس ببطء بمفتاح الهايدرنت',
+              'الفتح السريع يسبب مطرقة مائية تقذف الخراطيم\nحصى الحنفية غير النظيفة يدخل الخط ويتلف المضخة')),
+            N(1,E('مفتاح هايدرنت','Hydrant key','عدد يدوية',
+              'فتح وغلق محبس الحنفية الأرضية وأغطيتها',
+              'ركّبه على رأس المحبس\nافتح ببطء وبعدد لفّات كامل\nأغلق كليًا بعد انتهاء العملية',
+              'الغلق غير الكامل يترك تسريبًا مستمرًا\nالفتح العنيف يكسر عمود المحبس')),
+            N(2,SUCSPAN()),
+            N(7,STRAPS())
+          ]),
+
+          C(2,'الخانة الخلفية جهة اليسار','Rear left compartment','bay','يسار',[
+            N(5,HOSE45()),
+            N(2,SUCSPAN()),
+            N(2,E('مقسم ماء (رؤوس + فالف)','Dividing breeching with valves','خراطيم',
+              'تقسيم الخط الوارد إلى خطوط عمل مع فالف تحكم لكل خط',
+              'ثبّته على الأرض قريبًا من فرق العمل\nأغلق الفالفات قبل طلب الماء\nافتح كل خط تدريجيًا حسب الحاجة',
+              'فتح كل الخطوط معًا يُسقط الضغط\nالمقسم غير المثبّت يقفز عند رفع الضغط')),
+            N(1,E('وصلة (5 – 4) BS','Adaptor 5 – 4 BS','ملحقات',
+              'ربط قارنات مختلفة المقاس بين الخراطيم أو مع مصادر الماء',
+              'تأكد من المقاسين قبل التركيب\nاربط بإحكام\nتحقق من عدم التسريب بعد فتح الماء تدريجيًا',
+              'التركيب غير المحكم ينفصل تحت الضغط ويضرب من حوله')),
+            N(2,BRANCH()),
+            N(1,E('جامع رؤوس (4 خطوط / 5.5)','Collecting head, 4 inlets','مصادر ماء',
+              'جمع أكثر من خط وارد في مدخل واحد لتغذية المضخة أو الصهريج',
+              'ركّبه على مدخل التغذية\nأوصل الخطوط الواردة وأحكم القارنات\nتأكد من عمل صمامات عدم الرجوع',
+              'تسريب أحد الوصلات يقطع التغذية فجأة أثناء العمل',
+              '', 'عدد المداخل: 4\nالمخرج: 5.5')),
+            N(1,E('مصفي شفط (فلتر)','Suction strainer','مصادر ماء',
+              'منع دخول الأوساخ والحصى إلى المضخة أثناء الشفط من مصدر مفتوح',
+              'يُركّب في نهاية خرطوم الشفط قبل الغمر\nاغمره بالكامل وابقِه بعيدًا عن القاع حتى لا يسحب الطين\nنظّفه بعد كل استعمال',
+              'الشفط بدون مصفاة يتلف دفّاعة المضخة\nانسداد المصفاة يقطع التغذية تدريجيًا')),
+            N(1,E('خرطوم الفوم','Foam pick-up hose','فوم',
+              'سحب مركّز الفوم من العبوة إلى خط الماء لتكوين المحلول',
+              'أدخل الطرف داخل عبوة الفوم حتى القاع\nتأكد من ضبط نسبة الخلط\nاشطف الخط بالماء النظيف بعد الانتهاء',
+              'بقاء مركّز الفوم داخل الخط يسبب تآكلًا وانسدادًا\nملامسة المركّز للعين والجلد — البس القفاز والنظارة')),
+            N(6,HOSE65()),
+            N(11,STRAPS()),
+            N(1,E('هندل خرطوم الإسعاف','Hose reel handle','ملحقات',
+              'لف خرطوم الإسعاف على البكرة وسحبه',
+              'اسحب الخرطوم بالقدر المطلوب فقط\nأعد اللف بانتظام وبدون تقاطع بعد الاستعمال',
+              'اللف غير المنتظم ينحشر ويمنع السحب في النداء التالي',
+              'يوجد كسر في البلاستيك الأسود'))
+          ]),
+
+          C(3,'خانة المضخة (الخلفية)','Pump compartment (rear)','bay','خلف',[
+            A('مضخة الماء','Main water pump','مصادر ماء',
+              'سحب الماء من الخزان أو المصدر ودفعه في الخطوط بالضغط المطلوب',
+              'تأكد من مصدر الماء قبل التشغيل\nافتح المخارج تدريجيًا وراقب الضغط\nراقب مستوى الخزان باستمرار',
+              'تشغيل المضخة بدون ماء يتلف المانع الميكانيكي خلال ثوانٍ\nرفع الضغط المفاجئ يقذف القاذف من يد رجل الإطفاء'),
+            A('مفاتيح الشد والتركيب','Coupling & fitting spanners','عدد يدوية',
+              'شد وفك وتركيب قارنات الخراطيم على مخارج المضخة',
+              'ضع فكّي المفتاح على أذن القارنة وشد حتى الإحكام',
+              'لا تفك أي قارنة قبل تصفير الضغط في الخط'),
+            N(1,E('قاذف خرطوم الإسعاف','Hose reel nozzle','خراطيم',
+              'التدخل السريع بخط الإسعاف المطاطي للحرائق الصغيرة دون فرد الخراطيم',
+              'اسحب الخرطوم من البكرة إلى مكان العمل\nافتح القاذف تدريجيًا\nأغلق وأعد اللف بعد الانتهاء',
+              'سحب الخرطوم وهو تحت الضغط ثم تركه يجعله يتحرك بعنف\nالخط المطاطي محدود التدفق — لا يكفي للحرائق الكبيرة',
+              'يوجد قطع في الخرطوم')),
+            N(2,E('مفتاح شد لخرطوم الإسعاف','Hose reel spanner','عدد يدوية',
+              'شد وفك قارنات خرطوم الإسعاف',
+              'ضع المفتاح على أذن القارنة وشد حتى الإحكام\nلا تفك قبل تصفير الضغط',
+              'انزلاق المفتاح تحت الضغط يصيب اليد')),
+            N(2,E('دعامية أسفل السيارة','Vehicle support stand','عدد ومساعدات',
+              'دعم السيارة بعد الرفع أو تثبيتها على أرض غير مستوية',
+              'ضعها تحت نقطة تحمّل قوية في الشاسيه\nأنزل الحمل عليها ببطء وتأكد من ثباتها قبل العمل',
+              'العمل تحت السيارة قبل وضع الدعامات خطر قاتل\nالوضع على أرض رخوة يُغرزها ويُسقط الحمل'))
+          ], 'الريلة بخانة المضخة مقطوعة'),
+
+          C(4,'السقف — أعلى السيارة','Roof','bay','أعلى',[
+            N(1,E('مونيتر','Roof monitor','خراطيم',
+              'رمي كمية ماء كبيرة لمسافة بعيدة من أعلى السيارة\nتبريد الصهاريج والأسطح المجاورة\nالحرائق التي يتعذر الاقتراب منها',
+              'ثبّت السيارة واسحب فرامل اليد\nشغّل المضخة وتأكد من مصدر الماء\nوجّه المونيتر نحو الهدف قبل فتح الماء\nافتح المحبس تدريجيًا وحرّك ببطء وأنت ممسك بالمقبض',
+              'قوة الاندفاع تحرك المونيتر فجأة إن تُرك\nالرمي المباشر قد يُسقط أشخاصًا أو يهدم أجزاء ضعيفة من المبنى\nيستهلك ماء الصهريج في دقائق — راقب مستوى الخزان',
+              '', 'الموقع: أعلى الصهريج\nالتحكم: يدوي من فوق السيارة')),
+            N(4,E('خرطوم شفط 2.5 بوصة','Suction hose 2.5"','مصادر ماء',
+              'سحب الماء من مصدر مفتوح (بركة، خزان أرضي، صهريج) إلى المضخة',
+              'ركّب المصفاة في الطرف الغاطس\nأحكم القارنات بمفتاح شد الشفط\nاغمر الطرف بالكامل تحت سطح الماء\nتأكد من عدم دخول الهواء من أي وصلة',
+              'الخرطوم جامد وثقيل — يُحمل وينزل بشخصين\nدخول الهواء يُفقد المضخة قدرة الشفط\nالوقوف على حافة المصدر خطر سقوط في الماء',
+              '', 'القطر: 2.5 بوصة\nطول القطعة: 2.5 م\nالعدد: 4 قطع')),
+            N(1,E('سلم 12 متر','Ladder 12 m','سلالم',
+              'الصعود للطوابق المنخفضة والأسطح والوصول للنوافذ',
+              'يُنزل ويُحمل بشخصين\nضع القاعدة على أرض صلبة مستوية بزاوية 75 درجة تقريبًا\nيثبّت شخص أسفل السلم أثناء الصعود\nاصعد ووجهك إلى السلم وأمسك بالدرجات لا بالجوانب',
+              'ملامسة أسلاك الكهرباء العلوية\nالزاوية الخاطئة تُزحلق السلم من أسفله\nتجاوز عدد الأشخاص أو الحمولة المسموحة',
+              '', 'الطول: 12 م\nالنوع: سلم انزلاقي')),
+            N(1,E('بودرة إزالة الزيت','Oil absorbent powder','مواد',
+              'امتصاص انسكابات الزيت والوقود على الطريق ومنع الانزلاق',
+              'انثرها على كامل مساحة الانسكاب\nاتركها حتى تمتص السائل\nاكنسها واجمع الناتج في وعاء مخصص للتخلص منه',
+              'البقعة تبقى زلقة قبل الكنس — أبقِ المنطقة مغلقة\nالبودرة المشبعة بالوقود تبقى قابلة للاشتعال\nتجنّب استنشاق الغبار أثناء النثر')),
+            N(2,E('شيول','Shovel','عدد يدوية',
+              'نثر وجمع البودرة والرمل وإزالة الحطام الخفيف',
+              'امسك بكلتا اليدين واستعمل عضلات الرجلين في الرفع لا الظهر',
+              'الرفع الخاطئ يصيب الظهر\nقد يوجد تحت الحطام زجاج أو أسلاك مكشوفة'))
+          ], 'يوجد عدد (2) قلص كتان أعلى السيارة')
+        ] },
+
+      { id:'rescue', code:'RT 10277', maker:'Rosenbauer', name:{ar:'سيارة الإنقاذ',en:'Rescue Tender'},
+        note:{ar:'معدات القص والفتح والرفع والتدعيم، وكرين خلفي للرفع والسحب.',en:'Cutting, spreading, lifting and shoring, with a rear crane.'},
+        specs:[{k:{ar:'رقم اللوحة',en:'Plate no.'},v:{ar:'10277',en:'10277'}},
+               {k:{ar:'النوع',en:'Make'},v:{ar:'روزنباور',en:'Rosenbauer'}},
+               {k:{ar:'الشكل',en:'Body'},v:{ar:'إنقاذ',en:'Rescue'}},
+               {k:{ar:'الموديل',en:'Model year'},v:{ar:'2016',en:'2016'}}],
+        compartments:[
+          cabN('كابينة السائق','Driver cab',[
+            I('مثلث مروري','Warning triangle',1,'تأمين موقع','',
+              'تنبيه السائقين القادمين لوجود المركبة متوقفة في الطريق',
+              'البس السترة العاكسة قبل النزول\nضعه خلف المركبة باتجاه السير القادم وبمسافة كافية',
+              'الوقوف داخل مسار المركبات أثناء الوضع'),
+            I('كشاف يدوي أسود كبير (سير أسود)','Large handheld torch',4,'إضاءة','عدد 2 + 2',
+              'الإضاءة القوية أثناء البحث والعمل الليلي',
+              'افحص الشحن في بداية الوردية\nثبّته بالسير لتبقى اليد حرة',
+              'في الأجواء القابلة للاشتعال يُستعمل كشاف مانع للانفجار فقط'),
+            I('كشاف يدوي أسود','Handheld torch',4,'إضاءة','',
+              'الإضاءة داخل الأماكن المظلمة والفحص الليلي','',''),
+            I('ريموت الونش','Winch remote control',1,'رفع وسحب','',
+              'تشغيل ونش السحب عن بُعد أثناء سحب المركبات أو الأجسام الثقيلة',
+              'ثبّت السيارة وأنزل الدعامات قبل السحب\nتأكد من تثبيت الخطاف في نقطة تحمّل قوية\nقف بعيدًا عن خط السلك ومن جهة جانبية\nاسحب بضغطات قصيرة ومتتالية وراقب السلك',
+              'انقطاع السلك تحت الشد يسبب ضربة قاتلة — لا يقف أحد في خط السحب\nملامسة السلك أثناء اللف تقطع الأصابع\nالسحب بزاوية جانبية يقلب الحمل'),
+            I('مفاتيح المقاعد','Seat keys',3,'ملحقات','عدد (1) غير موجود','',''),
+            I('كيبل شحن (المركز)','Charging cable (station)',1,'كهرباء','',
+              'شحن بطارية السيارة من مقبس المحطة أثناء الوقوف',
+              'يُفصل تلقائيًا أو يدويًا قبل التحرك',
+              'التحرك والكيبل موصول يتلف المقبس'),
+            I('كيبل شحن بين سيارتين','Jump start cables',1,'كهرباء','يوجد خلف السائق',
+              'تشغيل مركبة بطاريتها فارغة من مركبة أخرى',
+              'أوقف المحركين\nوصّل الأحم
