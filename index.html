@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#A81B2D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>أسطول الدفاع المدني — قطر</title>
+<title>الدفاع المدني — دولة قطر</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="icon" href="./icon-192.png">
@@ -393,6 +393,17 @@ html[data-theme="dark"] .toast{background:var(--gold);color:#221B08}
 html[data-theme="dark"] .demo{color:#E7C468}
 html[data-theme="dark"] .elev .cavity{fill:#0D0B09}
 html[data-theme="dark"] .crest img{filter:brightness(1.04)}
+html[data-theme="dark"] .top .band{opacity:.45}
+html[data-theme="dark"] .topin{background:linear-gradient(180deg,#272119,#1C1813);
+  color:#F2E9DC;border:1px solid #3E342B;border-top:0;box-shadow:0 6px 20px rgba(0,0,0,.55)}
+html[data-theme="dark"] .topin .ttl{color:#F5CE5C}
+html[data-theme="dark"] .tbtn{background:rgba(245,206,92,.12);color:#F2E9DC;border:1px solid #3E342B}
+html[data-theme="dark"] .navbar{background:linear-gradient(180deg,#272119,#1C1813);
+  border-top:1px solid #3E342B;box-shadow:0 -6px 20px rgba(0,0,0,.5)}
+html[data-theme="dark"] .navbar button{background:#F0C64B;color:#241B02;box-shadow:0 2px 0 #B98F12}
+html[data-theme="dark"] .navbar button:disabled{background:#3A322A;color:#8A7E72;box-shadow:none}
+html[data-theme="dark"] .bays{background:linear-gradient(180deg,#272119,#1C1813);border:1px solid #3E342B}
+html[data-theme="dark"] .acct .cv,html[data-theme="dark"] .hero .cv{opacity:.6}
 html[data-theme="dark"] h1,html[data-theme="dark"] h2,
 html[data-theme="dark"] .comp .ch .t b,html[data-theme="dark"] .item b,
 html[data-theme="dark"] .crest b{text-shadow:none;letter-spacing:0}
@@ -454,13 +465,14 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
 <div class="toast" id="toast"></div>
 <input type="file" id="fileIn" accept="application/json" hidden>
 <input type="file" id="imgIn" accept="image/*" capture="environment" hidden>
+<input type="file" id="bulkIn" accept="image/*" multiple hidden>
 
 <script>
 /* =========================================================
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 27;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 28;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -570,8 +582,8 @@ const UI = {
   updated:['تم تحديث بيانات الأسطول إلى أحدث إصدار','Fleet data updated to the latest release'],
   updateT:['تحديث البيانات','Data update'],
   adminOnly:['هذه الأدوات للمدير فقط.','These tools are for the administrator only.'],
-  acadT:['أكاديمية الدفاع المدني — قطر','Qatar Civil Defence Academy'],
-  acadS:['Qatar Civil Defence Academy','أكاديمية الدفاع المدني — قطر'],
+  acadT:['الدفاع المدني — دولة قطر','Civil Defence — State of Qatar'],
+  acadS:['Civil Defence — State of Qatar','الدفاع المدني — دولة قطر'],
   defT:['التعريف','Definition'],
   nameLbl:['الاسم','Name'],
   usesLbl:['الاستعمالات','Uses'],
@@ -595,6 +607,9 @@ const UI = {
   phone:['البريد الإلكتروني','Email address'],
   noAdminSet:['لم يُضبط بريد المدير بعد — أي بريد صحيح يُقبل مؤقتًا.','Administrator email not set yet — any valid email is accepted for now.'],
   wrongEmail:['هذا البريد غير مصرّح له بالإدارة.','This email is not authorised.'],
+  bulkImg:['استيراد صور المعدات','Import equipment photos'],
+  bulkImgS:['سمِّ كل صورة باسم المعدة، واخترها كلها دفعة واحدة.','Name each photo after the equipment, then select them all at once.'],
+  bulkDone:['صورة رُبطت','photos linked'],
   publishT:['نشر التحديث للجميع','Publish update to everyone'],
   publishS:['يرفع السيارات والخانات والمعدات والإشعارات لكل الأجهزة.','Uploads appliances, compartments, equipment and notices to every device.'],
   publishing:['جارٍ النشر…','Publishing…'],
@@ -5217,6 +5232,10 @@ function renderResults(){
   box.innerHTML = n ? out : `<div class="empty"><b>${T('noRes')}</b>${T('noResS')}</div>`;
 }
 
+function fmtDate(d){
+  const p = n => String(n).padStart(2,'0');
+  return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
 function viewNotices(){
   const list = (DB.notices||[]).slice().sort((a,b)=>b.at-a.at);
   let h = `<div class="eyebrow">${T('tabNotices')}</div>
@@ -5228,7 +5247,7 @@ function viewNotices(){
     const d = new Date(n.at);
     h += `<div class="notice ${isNew?'new':''}">
       <h4>${esc(n.title)}</h4><p>${esc(n.body)}</p>
-      <time>${d.toLocaleDateString(lang?'en-GB':'ar-QA')} · ${d.toLocaleTimeString(lang?'en-GB':'ar-QA',{hour:'2-digit',minute:'2-digit'})}</time>
+      <time>${fmtDate(d)}</time>
       ${admin?`<div class="actions" style="margin-top:10px"><button class="btn d" onclick="delNotice('${n.id}')">${T('del')}</button></div>`:''}
     </div>`;
   });
@@ -5256,6 +5275,10 @@ function viewAccount(){
       <button class="arow" onclick="askPush()">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 16V11a6 6 0 1 0-12 0v5l-1.5 3h15Z"/><path d="M10 21h4"/></svg></span>
         <span class="t"><b>${T('allowPush')}</b><span>${pushStatusText()}</span></span>
+      </button>
+      <button class="arow" onclick="document.getElementById('bulkIn').click()">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg></span>
+        <span class="t"><b>${T('bulkImg')}</b><span>${T('bulkImgS')}</span></span>
       </button>
       <button class="arow" id="pubBtn" onclick="publishData()">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></span>
@@ -5617,7 +5640,7 @@ function toggleLang(){
   $('#tb1').textContent = T('tabFleet'); $('#tb2').textContent = T('tabSearch');
   $('#tb3').textContent = T('tabNotices'); $('#tb4').textContent = T('tabAcct');
   const ub = $('#updT'); if(ub) ub.textContent = lang ? 'Update available — tap to refresh' : 'يتوفر تحديث للتطبيق — اضغط للتحديث';
-  document.title = lang?'Civil Defence Fleet — Qatar':'أسطول الدفاع المدني — قطر';
+  document.title = lang?'Civil Defence Fleet — Qatar':'الدفاع المدني — دولة قطر';
   store.set('qcd_lang',lang);
   render();
 }
@@ -5937,6 +5960,47 @@ async function signOut(){
   render(); toast(T('signout'));
 }
 
+/* ---------- استيراد صور بالجملة ---------- */
+const normName = v => String(v||'')
+  .replace(/\.[a-z0-9]+$/i,'')
+  .replace(/[\u064B-\u0652\u0640]/g,'')
+  .replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')
+  .replace(/[()_\-\[\]·.,]/g,' ')
+  .replace(/\s+/g,' ')
+  .trim().toLowerCase();
+
+document.getElementById('bulkIn').addEventListener('change', async e => {
+  const files = [...(e.target.files||[])];
+  e.target.value = '';
+  if(!files.length) return;
+  if(!admin){ toast(T('needLogin')); return; }
+
+  const index = {};
+  DB.vehicles.forEach(v => v.compartments.forEach(c => c.items.forEach(it => {
+    const a = normName(it.name.ar), b = normName(it.name.en);
+    if(a && !index[a]) index[a] = [];
+    if(a) index[a].push(it.id);
+    if(b && b!==a){ if(!index[b]) index[b] = []; index[b].push(it.id); }
+  })));
+
+  let linked = 0; const missed = [];
+  toast(T('syncing'));
+  for(const f of files){
+    const key = normName(f.name);
+    const ids = index[key];
+    if(!ids){ missed.push(f.name); continue; }
+    try{
+      const data = await shrinkImage(f);
+      for(const id of ids) await setImage(id, data);
+      linked += ids.length;
+    }catch(err){ missed.push(f.name); }
+  }
+  await save(); render();
+  alertModal(`${linked} ${T('bulkDone')}` + (missed.length
+    ? `\n\n${lang?'Not matched:':'لم تُطابق:'}\n` + missed.slice(0,12).join('\n') + (missed.length>12?'\n…':'')
+    : ''));
+});
+
 /* ---------- المزامنة مع الخادم ---------- */
 async function pullRemote(silent){
   if(!WORKER_URL) return;
@@ -6109,7 +6173,7 @@ async function doInstall(){
    ========================================================= */
 try{
   if(document.querySelector('link[rel=manifest]')) throw 0;
-  const manifest = {name:'أسطول الدفاع المدني — قطر',short_name:'الأسطول',start_url:'./',display:'standalone',
+  const manifest = {name:'الدفاع المدني — دولة قطر',short_name:'الأسطول',start_url:'./',display:'standalone',
     background_color:'#100D0B',theme_color:'#100D0B',dir:'rtl',lang:'ar',
     icons:[{src:'data:image/svg+xml;base64,'+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="#100D0B"/><path d="M20 4 L34 9v11c0 8-5.8 14-14 16-8.2-2-14-8-14-16V9Z" fill="#D8232A"/><path d="M20 12c2 3 .8 4.8-.3 6.3-1.2 1.7-2 3-.8 5 .5.9 1.3 1.5 1.3 1.5-3-.4-5.3-2.6-5.3-5.4 0-1.4.4-2.2.4-2.2 0 1.4.8 2.2 1.5 2.3.7.1 1-.5.8-1.4-.7-2.5.5-4.7 2.4-6.1Z" fill="#FFC000"/></svg>'),
       sizes:'512x512',type:'image/svg+xml',purpose:'any'}]};

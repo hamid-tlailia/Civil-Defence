@@ -2,7 +2,7 @@
    يحفظ نسخة من التطبيق ليعمل بلا إنترنت داخل المحطة. */
 
 /* BUILD 26 — يتغيّر مع كل نشر ليكتشف المتصفح النسخة الجديدة */
-const BUILD = 27;
+const BUILD = 28;
 const CACHE = 'qcd-fleet-v' + BUILD;
 
 const SHELL = [
