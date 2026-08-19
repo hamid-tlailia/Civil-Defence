@@ -67,10 +67,8 @@ h2{font-family:var(--display);font-weight:700;font-size:17px;margin:0 0 8px;colo
 /* ===== شعار الرئيسية ===== */
 .crest{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh);
   padding:22px 16px 18px;text-align:center;margin:16px 0 6px}
-.crest .badge{width:132px;height:132px;margin:0 auto 4px;display:grid;place-items:center;
-  border-radius:34px;background:#fff;border:9px solid rgba(168,27,45,.22);box-shadow:var(--sh)}
-.crest img{width:96px;height:96px;object-fit:contain}
-html[data-theme="dark"] .crest .badge{background:#F7F3ED;border-color:rgba(201,41,58,.30)}
+.crest .badge{width:auto;height:auto;margin:0 auto 4px;display:grid;place-items:center;background:none}
+.crest img{width:120px;height:120px;object-fit:contain}
 .crest svg{width:96px;height:96px}
 .crest b{display:block;font-family:var(--display);font-weight:900;font-size:18px;color:var(--ink);margin-top:12px}
 .crest span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;direction:ltr}
@@ -83,9 +81,9 @@ html[data-theme="dark"] .crest .badge{background:#F7F3ED;border-color:rgba(201,4
 .vcard .lbl b,.vcard .lbl span{color:#2E2200}
 .vcard:active{transform:scale(.98)}
 .vcard .pic{background:linear-gradient(180deg,#FBF8F3,#EDE6DB);padding:8px 6px 2px;border-bottom:1px solid var(--line2)}
-.vcard .lbl{background:var(--gold);padding:8px 10px 9px;text-align:center}
-.vcard .lbl b{display:block;font-family:var(--display);font-weight:900;font-size:14.5px;color:#2E2200;line-height:1.35}
-.vcard .lbl span{display:block;font-size:11.5px;font-weight:600;color:#5E4A0C;margin-top:3px}
+.vcard .lbl{background:var(--card);border-top:2px solid var(--gold);padding:9px 10px 11px;text-align:center}
+.vcard .lbl b{display:block;font-family:var(--display);font-weight:900;font-size:14.5px;color:var(--ink);line-height:1.35}
+.vcard .lbl span{display:block;font-size:11.5px;font-weight:600;color:var(--red);margin-top:3px}
 .vcard .pic{position:relative}
 .vcard .pic::after{content:"";position:absolute;inset-inline:12%;bottom:6px;height:10px;border-radius:50%;
   background:radial-gradient(closest-side,rgba(0,0,0,.28),transparent)}
@@ -200,8 +198,11 @@ html[dir="rtl"] .comp.active .chev{transform:scaleX(-1) rotate(90deg)}
 .steps li::before{content:counter(s);font-family:var(--mono);font-size:11px;font-weight:700;
   width:21px;height:21px;flex:none;border-radius:7px;background:var(--gold);color:#3a2c05;
   display:grid;place-items:center;margin-top:3px}
-.navbar{display:flex;gap:9px;background:linear-gradient(180deg,var(--red2),var(--red));border-radius:14px;
-  padding:9px;margin-top:14px;box-shadow:var(--sh)}
+.navbar{position:fixed;inset-inline:0;bottom:calc(66px + env(safe-area-inset-bottom));z-index:78;
+  display:flex;gap:9px;background:linear-gradient(180deg,var(--red2),var(--red));
+  padding:10px 12px;max-width:760px;margin:0 auto;box-shadow:0 -4px 16px rgba(0,0,0,.18)}
+.navbar.rel{position:static;border-radius:14px;margin-top:14px;box-shadow:var(--sh)}
+.shell.withnav{padding-bottom:190px}
 .navbar button{flex:1;background:var(--gold);color:#3a2c05;border-radius:10px;padding:11px;
   font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;
   box-shadow:0 2px 0 var(--gold-dk)}
@@ -358,11 +359,11 @@ html[data-theme="dark"]{
 }
 html[data-theme="dark"] .vcard .pic{background:linear-gradient(180deg,#EFE9E0,#D9D1C6)}
 html[data-theme="dark"] .vcard .pic::after{background:radial-gradient(closest-side,rgba(0,0,0,.22),transparent)}
-html[data-theme="dark"] .vcard .lbl{background:#F0C64B}
+html[data-theme="dark"] .vcard .lbl{background:#241F1A;border-top:2px solid var(--gold)}
 html[data-theme="dark"] .vcard .lbl b,
-html[data-theme="dark"] .vcard button .lbl b{color:#221900}
+html[data-theme="dark"] .vcard button .lbl b{color:#F5CE5C !important}
 html[data-theme="dark"] .vcard .lbl span,
-html[data-theme="dark"] .vcard button .lbl span{color:#54400A}
+html[data-theme="dark"] .vcard button .lbl span{color:#B3A69A !important}
 html[data-theme="dark"] .vcard{border-color:#3E342B}
 html[data-theme="dark"] .draw{background:#EFE9E0;border-color:#3E342B}
 html[data-theme="dark"] .item .ph,
@@ -455,7 +456,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 22;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 24;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -590,6 +591,8 @@ const UI = {
   phone:['البريد الإلكتروني','Email address'],
   noAdminSet:['لم يُضبط بريد المدير بعد — أي بريد صحيح يُقبل مؤقتًا.','Administrator email not set yet — any valid email is accepted for now.'],
   wrongEmail:['هذا البريد غير مصرّح له بالإدارة.','This email is not authorised.'],
+  sentMail:['أُرسل رمز مكوّن من ستة أرقام إلى بريدك.','A six digit code has been sent to your email.'],
+  mailFail:['تعذّر إرسال الرمز — تحقق من الاتصال أو من إعداد الخادم.','Could not send the code — check the connection or the server setup.'],
   sendCode:['إرسال الرمز','Send code'],
   verifyT:['رمز التحقق','Verification code'],
   verifyS:['أدخل الرمز المكوّن من ستة أرقام.','Enter the six digit code.'],
@@ -2701,7 +2704,7 @@ function seed(){
               'ثبّت المصاب بكل الأحزمة وغطِّ رأسه\nاربط حبل توجيه لمنع الدوران',
               'الرفع بدون تثبيت كامل يُسقط المصاب\nالدوران أثناء الرفع يصدم الجدران'),
             A('منشار يدوي','Hand saw','عدد يدوية','',''),
-            A('هيب جديد','Wooden beam/prop (new)','رفع ودعم','',''),
+            A('هيب حديد','Steel beam/prop','رفع ودعم','',''),
             A('شيول','Shovel','عدد يدوية','',''),
             A('جيكات لتثبيت السيارة','Vehicle stabilising jacks','رفع ودعم','',''),
             A('سلم جديد','Ladder','سلالم','','')
@@ -3836,7 +3839,7 @@ const DOC = {
 'مثلث نزول للحفر مع البريك والحبل':['هيكل ثلاثي القوائم يُنصب فوق الفتحة مع بكرة وجهاز منع سقوط للإنزال والرفع.','','',''],
 'حمالة نزول':['حمالة تثبّت المصاب بالكامل لرفعه أو إنزاله رأسيًا.','','',''],
 'منشار يدوي':['منشار يدوي بنصل قابل للتبديل.','','',''],
-'هيب جديد':['قطعة خشبية جديدة للدعم والإسناد.','','',''],
+'هيب حديد':['قطعة حديدية تُستعمل في الدعم والإسناد تحت الأحمال الثقيلة.','','',''],
 'شيول':['مجرفة يدوية لنقل المواد السائبة وجمع الحطام.','','',''],
 'جيكات لتثبيت السيارة':['مكابس تُسند تحت المركبة لتثبيتها ومنع حركتها.','','',''],
 'سلم جديد':['سلم صعود إضافي محفوظ على سقف المركبة.','','',''],
@@ -4755,7 +4758,8 @@ let IMGS = {};
 let editMode = false;
 let admin = false;
 let pendingCode = null, pendingUntil = 0;
-const ADMIN_EMAIL = 'tlhamid18@gmail.com';   // ← ضع بريد المدير هنا، مثال: 'hamid@gmail.com'
+const ADMIN_EMAIL = 'tlhamid18@gmail.com';
+const WORKER_URL  = '';   // ← ضع رابط Cloudflare Worker هنا ليصلك الرمز على بريدك   // ← ضع بريد المدير هنا، مثال: 'hamid@gmail.com'
 const ADMIN_PHONE = '97471009494';
 const ADMIN_NAME  = 'حميد بن رابح';
 const ADMIN_NAME_EN = 'Hamid Bin Rabeh';
@@ -4810,8 +4814,11 @@ function silhouette(v){
   let s = `<svg class="elev" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t(v.name))}">
     <defs>
       <linearGradient id="sb${id}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#E8353C"/><stop offset=".55" stop-color="#C51F26"/><stop offset="1" stop-color="#8E1116"/>
+        <stop offset="0" stop-color="#EDEF4B"/><stop offset=".55" stop-color="#DCDE22"/><stop offset="1" stop-color="#BFC114"/>
       </linearGradient>
+      <pattern id="sc${id}" width="26" height="10" patternUnits="userSpaceOnUse">
+        <rect width="26" height="10" fill="#D8232A"/><rect x="13" width="13" height="10" fill="#EDEF4B"/>
+      </pattern>
       <linearGradient id="sg${id}" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#93A3AC"/><stop offset="1" stop-color="#41525C"/>
       </linearGradient>
@@ -4843,8 +4850,10 @@ function silhouette(v){
   if(twoCab) s += `<rect x="${x0+85}" y="${bodyTop+10}" width="${cabW-94}" height="34" rx="6" fill="url(#sg${id})"/>`;
   // فاصل الكابينة عن الصندوق
   s += `<rect x="${x0+cabW}" y="${bodyTop+4}" width="2.5" height="${bodyBot-bodyTop-14}" rx="1" fill="rgba(0,0,0,.28)"/>`;
-  // الشريط العاكس
-  s += `<rect x="${x0}" y="${bodyBot-15}" width="${x1-x0}" height="9" fill="#F3C13A" opacity=".95"/>`;
+  // الشريط العاكس الأحمر المتقطّع والقاعدة البيضاء
+  s += `<rect x="${x0}" y="${bodyBot-20}" width="${x1-x0}" height="10" fill="url(#sc${id})" opacity=".95"/>`;
+  s += `<rect x="${x0}" y="${bodyBot-10}" width="${x1-x0}" height="10" rx="4" fill="#F7F7F2"/>`;
+
   // العجلات
   const wy = bodyBot + 6;
   const ws = [x0+52, x1-52];
@@ -4870,8 +4879,11 @@ function elevation(v,{side='يمين', activeId=null, all=false}={}){
   let s = `<svg class="elev" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t(v.name))}">
   <defs>
     <linearGradient id="bd${uidg}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#E8353C"/><stop offset=".55" stop-color="#C51F26"/><stop offset="1" stop-color="#8E1116"/>
+      <stop offset="0" stop-color="#EDEF4B"/><stop offset=".55" stop-color="#DCDE22"/><stop offset="1" stop-color="#BFC114"/>
     </linearGradient>
+    <pattern id="cv${uidg}" width="24" height="9" patternUnits="userSpaceOnUse">
+      <rect width="24" height="9" fill="#D8232A"/><rect x="12" width="12" height="9" fill="#EDEF4B"/>
+    </pattern>
     <linearGradient id="gl${uidg}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#4d5b63"/><stop offset="1" stop-color="#1d262b"/>
     </linearGradient>
@@ -4913,7 +4925,7 @@ function elevation(v,{side='يمين', activeId=null, all=false}={}){
     </g>`;
   });
   // الشريط العاكس + الشيفرون الخلفي
-  s += `<rect x="${X(x0,bodyW)}" y="${bodyBot-16}" width="${bodyW}" height="9" fill="#FFC000" opacity=".92"/>`;
+  s += `<rect x="${X(x0,bodyW)}" y="${bodyBot-16}" width="${bodyW}" height="9" fill="url(#cv${uidg})" opacity=".95"/>`;
 
 
   // الخانات
@@ -5087,16 +5099,18 @@ function viewVehicle(id){
 
   let h = `<div class="draw">${silhouette(v)}</div>
   <h1>${esc(t(v.name))}</h1>
-  <p class="sub">${esc(v.maker)} · ${esc(v.code)}</p>`;
+  <p class="sub">${esc(v.maker)}</p>`;
 
-  if(L.length) h += `<div class="eyebrow">${T('leftS')}</div>` + L.map(c=>compRow(v,c)).join('');
-  if(R.length) h += `<div class="eyebrow">${T('rightS')}</div>` + R.map(c=>compRow(v,c)).join('');
+  if(L.length) h += `<div class="eyebrow">${T('leftS')}</div>
+      <div class="draw">${elevation(v,{side:'يسار'})}</div>` + L.map(c=>compRow(v,c)).join('');
+  if(R.length) h += `<div class="eyebrow">${T('rightS')}</div>
+      <div class="draw">${elevation(v,{side:'يمين'})}</div>` + R.map(c=>compRow(v,c)).join('');
   if(cabs.length) h += `<div class="eyebrow">${T('cabsC')}</div>` + cabs.map(c=>compRow(v,c)).join('');
   if(X.length) h += `<div class="eyebrow">${T('sideO')}</div>` + X.map(c=>compRow(v,c)).join('');
 
   if(v.specs && v.specs.length){
     h += `<div class="eyebrow">${T('specsT')}</div><div class="specs" style="margin-top:0">`;
-    v.specs.forEach(x=>{ h += `<div class="spec"><b>${esc(t(x.k))}</b><i>${esc(t(x.v))}</i></div>`; });
+    v.specs.filter(x=>t(x.k)!=='رقم اللوحة' && t(x.k)!=='Plate no.').forEach(x=>{ h += `<div class="spec"><b>${esc(t(x.k))}</b><i>${esc(t(x.v))}</i></div>`; });
     h += `</div>`;
   }
   if(t(v.note)) h += `<p class="sub" style="margin-top:14px">${esc(t(v.note))}</p>`;
@@ -5524,6 +5538,7 @@ function render(){
   else if(p[0]==='account') app.innerHTML = viewAccount();
   else if(p[0]==='train') app.innerHTML = viewTrain();
   else app.innerHTML = viewFleet();
+  app.classList.toggle('withnav', p[0]==='e');
   const tab = p[0]==='search'?'search':(p[0]==='notices'?'notices':((p[0]==='account'||p[0]==='train')?'account':'fleet'));
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on', b.dataset.t===tab));
   updateBadge();
@@ -5593,8 +5608,34 @@ function toggleLang(){
 /* =========================================================
    9. المحرر (الأوراق السفلية)
    ========================================================= */
+function askConfirm(msg, danger){
+  return new Promise(res=>{
+    openSheet(`<h3>${lang?'Confirm':'تأكيد'}</h3>
+      <p class="sub" style="font-size:14px;margin:-6px 0 16px">${esc(msg)}</p>
+      <div class="actions" style="margin-bottom:6px">
+        <button class="btn ${danger?'d':'p'}" style="flex:1;justify-content:center" id="cfYes">${lang?'Confirm':'تأكيد'}</button>
+        <button class="btn" id="cfNo">${T('cancel')}</button>
+      </div>`);
+    const done = v => { closeSheet(); res(v); };
+    setTimeout(()=>{
+      const y = document.getElementById('cfYes'), n = document.getElementById('cfNo');
+      if(y) y.onclick = () => done(true);
+      if(n) n.onclick = () => done(false);
+      const sc = document.getElementById('scrim');
+      if(sc) sc.onclick = () => done(false);
+    }, 40);
+  });
+}
+function alertModal(msg){
+  openSheet(`<h3>${lang?'Notice':'تنبيه'}</h3>
+    <p class="sub" style="font-size:14px;margin:-6px 0 16px">${esc(msg)}</p>
+    <div class="actions" style="margin-bottom:6px">
+      <button class="btn p blk" onclick="closeSheet()">${lang?'OK':'حسنًا'}</button></div>`);
+}
+
 function openSheet(html){ $('#sheet').innerHTML = `<div class="grab"></div>`+html; $('#sheet').classList.add('on'); $('#scrim').classList.add('on'); }
-function closeSheet(){ $('#sheet').classList.remove('on'); $('#scrim').classList.remove('on'); }
+function closeSheet(){
+  const sc = document.getElementById('scrim'); if(sc) sc.onclick = closeSheet; $('#sheet').classList.remove('on'); $('#scrim').classList.remove('on'); }
 const val = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
 const field = (id,label,v,{area=false,ltr=false,ph=''}={}) =>
   `<div class="f ${ltr?'ltr':''}"><label for="${id}">${label}</label>${
@@ -5695,7 +5736,7 @@ async function saveItem(vid,cid,iid){
   await save(); closeSheet(); go('#/c/'+vid+'/'+cid); render(); toast(T('saved'));
 }
 async function delItem(vid,cid,iid){
-  if(!confirm(T('confirmDel'))) return;
+  if(!await askConfirm(T('confirmDel'), true)) return;
   const c = findC(findV(vid),cid);
   c.items = c.items.filter(x=>x.id!==iid);
   await setImage(iid,null);
@@ -5725,7 +5766,7 @@ async function saveComp(vid,cid){
   await save(); closeSheet(); openComp = c.id; render(); toast(T('saved'));
 }
 async function delComp(vid,cid){
-  if(!confirm(T('confirmDel'))) return;
+  if(!await askConfirm(T('confirmDel'), true)) return;
   const v = findV(vid);
   v.compartments = v.compartments.filter(c=>c.id!==cid);
   v.compartments.filter(c=>c.kind==='bay').forEach((c,i)=>c.no=i+1);
@@ -5756,7 +5797,7 @@ async function saveVehicle(vid){
   await save(); closeSheet(); go('#/v/'+v.id); render(); toast(T('saved'));
 }
 async function delVehicle(vid){
-  if(!confirm(T('confirmDel'))) return;
+  if(!await askConfirm(T('confirmDel'), true)) return;
   DB.vehicles = DB.vehicles.filter(v=>v.id!==vid);
   await save(); closeSheet(); go('#/'); render(); toast(T('deleted'));
 }
@@ -5796,10 +5837,30 @@ function openLogin(){
     </div>`);
   setTimeout(()=>{ const e = document.getElementById('ph'); if(e) e.focus(); }, 260);
 }
-function sendCode(){
+async function sendCode(){
   const v = val('ph');
   if(!emailOK(v)){ toast(T('wrongEmail')); return; }
   adminEmail = String(v).trim().toLowerCase();
+  if(WORKER_URL){
+    try{
+      const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/send', {
+        method:'POST', headers:{'content-type':'application/json'},
+        body: JSON.stringify({phone: adminEmail})
+      });
+      if(!r.ok) throw new Error('send');
+      pendingCode = null; pendingUntil = Date.now() + 5*60*1000;
+      openSheet(`<h3>${T('verifyT')}</h3>
+        <p class="sub" style="font-size:13px;margin:-6px 0 12px">${T('sentMail')} — ${esc(maskEmail())}</p>
+        <div class="f ltr"><label for="otp">${T('verifyT')}</label>
+          <input id="otp" type="tel" inputmode="numeric" maxlength="6" placeholder="······" style="letter-spacing:.4em;text-align:center;font-size:19px"></div>
+        <div class="actions" style="margin-bottom:6px">
+          <button class="btn p" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
+          <button class="btn" onclick="openLogin()">${T('resend')}</button>
+        </div>`);
+      setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
+      return;
+    }catch(e){ toast(T('mailFail')); }
+  }
   pendingCode = String(Math.floor(100000 + Math.random()*900000));
   pendingUntil = Date.now() + 5*60*1000;
   pushLocal(lang?'Verification code':'رمز التحقق', (lang?'Your code is ':'رمز الدخول: ')+pendingCode);
@@ -5816,6 +5877,19 @@ function sendCode(){
 }
 async function verifyCode(){
   const c = digits(val('otp'));
+  if(WORKER_URL && !pendingCode){
+    try{
+      const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/verify', {
+        method:'POST', headers:{'content-type':'application/json'},
+        body: JSON.stringify({phone: adminEmail, code: c})
+      }).then(x=>x.json());
+      if(!r.ok){ toast(T('wrongCode')); return; }
+      admin = true;
+      await store.set('qcd_admin', {at:Date.now(), email:adminEmail, token:r.token});
+      closeSheet(); go('#/account'); render(); toast(lang?'Signed in':T('welcome'));
+      return;
+    }catch(e){ toast(T('mailFail')); return; }
+  }
   if(!pendingCode || Date.now() > pendingUntil){ toast(lang?'Code expired.':'انتهت صلاحية الرمز.'); return; }
   if(c !== pendingCode){ toast(T('wrongCode')); return; }
   admin = true; pendingCode = null;
@@ -5824,7 +5898,7 @@ async function verifyCode(){
   toast(lang?'Signed in':T('welcome'));
 }
 async function signOut(){
-  if(!confirm(T('signoutQ'))) return;
+  if(!await askConfirm(T('signoutQ'), true)) return;
   admin = false; editMode = false;
   await store.del('qcd_admin'); await store.set('qcd_edit', false);
   render(); toast(T('signout'));
@@ -5854,7 +5928,7 @@ async function publishNotice(){
   toast(T('published'));
 }
 async function delNotice(id){
-  if(!confirm(T('confirmDel'))) return;
+  if(!await askConfirm(T('confirmDel'), true)) return;
   DB.notices = (DB.notices||[]).filter(n=>n.id!==id);
   await save(); render(); toast(T('deleted'));
 }
@@ -5943,7 +6017,7 @@ document.getElementById('fileIn').addEventListener('change',async e=>{
 });
 async function resetData(){
   if(!admin){ toast(T('adminOnly')); return; }
-  if(!confirm(lang?'Replace all current content with the original data?':'استبدال كل المحتوى الحالي بالبيانات الأصلية؟')) return;
+  if(!await askConfirm(lang?'Replace all current content with the original data?':'استبدال كل المحتوى الحالي بالبيانات الأصلية؟', true)) return;
   DB = applyDocEn(applyDoc(seed())); await save(); go('#/'); render(); toast(T('resetOk'));
 }
 async function doInstall(){
