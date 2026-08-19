@@ -456,7 +456,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 24;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 26;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -4759,7 +4759,7 @@ let editMode = false;
 let admin = false;
 let pendingCode = null, pendingUntil = 0;
 const ADMIN_EMAIL = 'tlhamid18@gmail.com';
-const WORKER_URL  = '';   // ← ضع رابط Cloudflare Worker هنا ليصلك الرمز على بريدك   // ← ضع بريد المدير هنا، مثال: 'hamid@gmail.com'
+const WORKER_URL  = 'https://cd-fleet.tlhamid18.workers.dev';
 const ADMIN_PHONE = '97471009494';
 const ADMIN_NAME  = 'حميد بن رابح';
 const ADMIN_NAME_EN = 'Hamid Bin Rabeh';
@@ -5847,7 +5847,7 @@ async function sendCode(){
         method:'POST', headers:{'content-type':'application/json'},
         body: JSON.stringify({phone: adminEmail})
       });
-      if(!r.ok) throw new Error('send');
+      if(!r.ok){ const txt = await r.text().catch(()=>''); throw new Error(r.status + ' ' + txt.slice(0,120)); }
       pendingCode = null; pendingUntil = Date.now() + 5*60*1000;
       openSheet(`<h3>${T('verifyT')}</h3>
         <p class="sub" style="font-size:13px;margin:-6px 0 12px">${T('sentMail')} — ${esc(maskEmail())}</p>
@@ -5859,7 +5859,12 @@ async function sendCode(){
         </div>`);
       setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
       return;
-    }catch(e){ toast(T('mailFail')); }
+    }catch(e){
+      alertModal((lang?'Could not send the code from the server.\n':'تعذّر إرسال الرمز من الخادم.\n')
+        + String(e && e.message ? e.message : e)
+        + (lang?'\nCheck RESEND_KEY and ALLOWED_ORIGIN in the Worker.':'\nتحقق من RESEND_KEY و ALLOWED_ORIGIN في الـWorker.'));
+      return;
+    }
   }
   pendingCode = String(Math.floor(100000 + Math.random()*900000));
   pendingUntil = Date.now() + 5*60*1000;

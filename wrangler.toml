@@ -1,0 +1,20 @@
+name = "cd-fleet"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# استبدل الـ id بالناتج من الأمر:
+#   wrangler kv namespace create OTP
+kv_namespaces = [
+  { binding = "OTP", id = "ضع_هنا_معرّف_الـKV" }
+]
+
+[vars]
+# رابط موقعك على GitHub Pages بالضبط — بلا خط مائل في آخره
+ALLOWED_ORIGIN = "https://tlhamid18.github.io"
+
+# قناة الإرسال: email أو sms
+CHANNEL = "email"
+
+# المرسل. نطاق resend.dev يرسل فقط إلى بريد صاحب الحساب — يكفيك الآن.
+# بعد توثيق نطاق خاص بك غيّره إلى: "QCD Fleet <no-reply@نطاقك>"
+MAIL_FROM = "QCD Fleet <onboarding@resend.dev>"
