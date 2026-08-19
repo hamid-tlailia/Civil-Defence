@@ -38,30 +38,37 @@
 
 محتوى تدريبي داخلي — يُعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.
 
-## ربط إرسال رمز التحقق برسالة SMS
+## ربط إرسال رمز التحقق بالبريد الإلكتروني (مجاني)
 
-الملف `worker.js` جاهز للنشر على Cloudflare Workers. يولّد الرمز ويرسله رسالةً قصيرة ويتحقق منه في الخادم — الرمز لا يصل للتطبيق إطلاقًا.
+الدخول لحساب المدير صار بالبريد بدل رقم الجوال — بلا تكلفة ولا عقد مع مشغّل.
 
-```bash
-npm i -g wrangler
-wrangler login
-wrangler kv namespace create OTP        # انسخ الـ id إلى wrangler.toml
-wrangler secret put SMS_USER
-wrangler secret put SMS_PASS
-wrangler secret put ADMIN_PHONE         # 97471009494
-wrangler deploy
-```
+1. افتح `index.html` واضبط بريدك:
+   ```js
+   const ADMIN_EMAIL = 'your@email.com';
+   ```
+   ما دام فارغًا، أي بريد صحيح يُقبل مؤقتًا للتجربة.
 
-ثم في `index.html` استبدل توليد الرمز محليًا باستدعاء الـWorker:
+2. لإرسال الرمز فعلًا للبريد: انشر `worker.js` على Cloudflare Workers مع مفتاح Resend المجاني.
+   ```bash
+   npm i -g wrangler
+   wrangler login
+   wrangler kv namespace create OTP     # انسخ الـ id إلى wrangler.toml
+   wrangler secret put RESEND_KEY       # من resend.com — الخطة المجانية تكفي
+   wrangler secret put ADMIN_PHONE      # ضع فيه بريد المدير
+   wrangler deploy
+   ```
 
-```js
-// بدل توليد pendingCode محليًا
-await fetch(WORKER + '/send',   {method:'POST', headers:{'content-type':'application/json'},
-  body: JSON.stringify({phone})});
-// وعند التأكيد
-const r = await fetch(WORKER + '/verify', {method:'POST', headers:{'content-type':'application/json'},
-  body: JSON.stringify({phone, code})}).then(x=>x.json());
-if (r.ok) { admin = true; await store.set('qcd_admin', {at:Date.now(), token:r.token}); }
-```
+3. في `index.html` استبدل توليد الرمز محليًا باستدعاء الـWorker:
+   ```js
+   await fetch(WORKER + '/send',   {method:'POST', headers:{'content-type':'application/json'},
+     body: JSON.stringify({phone: email})});
+   const r = await fetch(WORKER + '/verify', {method:'POST', headers:{'content-type':'application/json'},
+     body: JSON.stringify({phone: email, code})}).then(x=>x.json());
+   if (r.ok) { admin = true; await store.set('qcd_admin', {at:Date.now(), token:r.token}); }
+   ```
 
-**المزوّد في قطر:** فودافون قطر تقدّم خدمة **SMS Connect** للشركات (بوابة A2P عبر API). تُفتح من Vodafone Business، وتحصل معها على بيانات الدخول ورابط الـAPI واسم مرسل مسجَّل لدى هيئة تنظيم الاتصالات (CRA) — تسجيل اسم المرسل إلزامي في قطر. المزوّد الثاني هو Ooredoo. وللتجربة السريعة قبل اعتماد الحساب، `worker.js` يدعم Twilio بتغيير `SMS_PROVIDER` فقط.
+الـWorker يدعم أيضًا الإرسال بالرسائل القصيرة بتغيير `CHANNEL` إلى `sms` — عبر فودافون قطر (خدمة SMS Connect للشركات، وتحتاج اسم مرسل مسجَّلًا لدى هيئة تنظيم الاتصالات) أو Twilio. لكن البريد أسرع وبلا تكلفة.
+
+---
+
+محتوى تدريبي داخلي — يُعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.

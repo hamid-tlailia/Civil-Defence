@@ -10,7 +10,7 @@
  *
  * الإعداد في Cloudflare:
  *   1) wrangler kv namespace create OTP    ثم اربطه باسم OTP في wrangler.toml
- *   2) الأسرار:  wrangler secret put SMS_USER / SMS_PASS / ADMIN_PHONE / SESSION_SECRET
+ *   2) الأسرار:  wrangler secret put RESEND_KEY / ADMIN_PHONE
  *
  * wrangler.toml
  *   name = "qcd-otp"
@@ -74,8 +74,12 @@ async function handleSend(body, env, request, cors) {
   const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 900000 + 100000);
   await env.OTP.put('code:' + phone, await sha256(code), { expirationTtl: CODE_TTL });
 
-  const text = `رمز الدخول لتطبيق أسطول الدفاع المدني: ${code}\nصالح 5 دقائق. لا تشاركه مع أحد.`;
-  await sendSms(phone, text, env);
+  if (env.CHANNEL === 'sms') {
+    const text = `رمز الدخول لتطبيق أسطول الدفاع المدني: ${code}\nصالح 5 دقائق. لا تشاركه مع أحد.`;
+    await sendSms(phone, text, env);
+  } else {
+    await sendEmail(phone, code, env);   // phone هنا هو البريد
+  }
 
   return json({ ok: true }, 200, cors);
 }
@@ -106,6 +110,44 @@ async function handleCheck(body, env, cors) {
 async function sendSms(phone, text, env) {
   if (env.SMS_PROVIDER === 'twilio') return sendTwilio(phone, text, env);
   return sendVodafone(phone, text, env);
+}
+
+/* ============ إرسال البريد (الطريقة المجانية الموصى بها) ============ */
+/**
+ * Resend — الخطة المجانية تكفي تمامًا (آلاف الرسائل شهريًا).
+ * سجّل في resend.com، وثّق نطاقك أو استعمل نطاق التجربة، ثم:
+ *   wrangler secret put RESEND_KEY
+ * وفي wrangler.toml:  MAIL_FROM = "QCD Fleet <onboarding@resend.dev>"
+ */
+async function sendEmail(to, code, env) {
+  const html = `<div dir="rtl" style="font-family:Tahoma,Arial;background:#F4F1EB;padding:24px">
+    <div style="max-width:480px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;
+                border:1px solid #E7DFD4">
+      <div style="height:6px;background:#A81B2D"></div>
+      <div style="padding:22px;text-align:center">
+        <h2 style="margin:0 0 6px;color:#1F1A16">أسطول الدفاع المدني</h2>
+        <p style="margin:0 0 18px;color:#7C6F64;font-size:14px">رمز الدخول لحساب المدير</p>
+        <div style="font-size:30px;letter-spacing:10px;font-weight:bold;color:#A81B2D;
+                    background:#FDF3D6;border-radius:12px;padding:14px">${code}</div>
+        <p style="margin:18px 0 0;color:#7C6F64;font-size:12.5px">
+          صالح 5 دقائق. إن لم تطلب هذا الرمز فتجاهل الرسالة ولا تشاركه مع أحد.</p>
+      </div>
+    </div></div>`;
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'authorization': 'Bearer ' + env.RESEND_KEY,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      from: env.MAIL_FROM || 'QCD Fleet <onboarding@resend.dev>',
+      to: [to],
+      subject: 'رمز الدخول — أسطول الدفاع المدني',
+      html
+    })
+  });
+  if (!res.ok) throw new Error('mail_failed:' + res.status);
 }
 
 /**
@@ -155,7 +197,9 @@ async function sendTwilio(phone, text, env) {
 /* ============ أدوات ============ */
 
 function normalise(v) {
-  let d = String(v || '').replace(/\D/g, '');
+  const raw = String(v || '').trim().toLowerCase();
+  if (raw.includes('@')) return raw;          // بريد إلكتروني
+  let d = raw.replace(/\D/g, '');
   if (d.startsWith('00')) d = d.slice(2);
   if (d.length === 8) d = '974' + d;          // رقم محلي بدون مفتاح الدولة
   if (d.startsWith('0974')) d = d.slice(1);
