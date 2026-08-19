@@ -330,6 +330,10 @@ html[dir="rtl"] .back svg{transform:scaleX(-1)}
 .hist span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
 
 /* ===== متفرقات ===== */
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(0,0,0,.25);
+  border-top-color:currentColor;display:inline-block;margin-inline-end:7px;vertical-align:-2px;
+  animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
 .updbar{position:fixed;inset-inline:0;bottom:calc(74px + env(safe-area-inset-bottom));margin:0 auto;
   width:max-content;max-width:92%;z-index:110;display:none;background:var(--gold);color:#2E2200;
   font-weight:700;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--sh2)}
@@ -456,7 +460,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 26;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 27;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -591,6 +595,15 @@ const UI = {
   phone:['البريد الإلكتروني','Email address'],
   noAdminSet:['لم يُضبط بريد المدير بعد — أي بريد صحيح يُقبل مؤقتًا.','Administrator email not set yet — any valid email is accepted for now.'],
   wrongEmail:['هذا البريد غير مصرّح له بالإدارة.','This email is not authorised.'],
+  publishT:['نشر التحديث للجميع','Publish update to everyone'],
+  publishS:['يرفع السيارات والخانات والمعدات والإشعارات لكل الأجهزة.','Uploads appliances, compartments, equipment and notices to every device.'],
+  publishing:['جارٍ النشر…','Publishing…'],
+  publishOk:['نُشر التحديث — سيصل الجميع عند فتح التطبيق','Published — everyone gets it on next open'],
+  pulled:['وصل تحديث جديد للبيانات','New data update received'],
+  syncing:['جارٍ المزامنة…','Syncing…'],
+  sending:['جارٍ الإرسال…','Sending…'],
+  checking:['جارٍ التحقق…','Verifying…'],
+  needLogin:['سجّل دخولك أولًا.','Sign in first.'],
   sentMail:['أُرسل رمز مكوّن من ستة أرقام إلى بريدك.','A six digit code has been sent to your email.'],
   mailFail:['تعذّر إرسال الرمز — تحقق من الاتصال أو من إعداد الخادم.','Could not send the code — check the connection or the server setup.'],
   sendCode:['إرسال الرمز','Send code'],
@@ -5244,6 +5257,10 @@ function viewAccount(){
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 16V11a6 6 0 1 0-12 0v5l-1.5 3h15Z"/><path d="M10 21h4"/></svg></span>
         <span class="t"><b>${T('allowPush')}</b><span>${pushStatusText()}</span></span>
       </button>
+      <button class="arow" id="pubBtn" onclick="publishData()">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></span>
+        <span class="t"><b>${T('publishT')}</b><span>${T('publishS')}</span></span>
+      </button>
       <button class="arow" onclick="signOut()">
         <span class="ic" style="color:#ff8f93"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5H6v14h9"/><path d="m18 12-4-3v6Z"/></svg></span>
         <span class="t"><b>${T('signout')}</b></span>
@@ -5608,6 +5625,14 @@ function toggleLang(){
 /* =========================================================
    9. المحرر (الأوراق السفلية)
    ========================================================= */
+function btnBusy(id, on, label){
+  const b = document.getElementById(id);
+  if(!b) return;
+  if(on){ b.dataset.old = b.innerHTML; b.disabled = true; b.style.opacity = '.65';
+          b.innerHTML = `<span class="spin"></span>${esc(label||'')}`; }
+  else { b.disabled = false; b.style.opacity = ''; if(b.dataset.old) b.innerHTML = b.dataset.old; }
+}
+
 function askConfirm(msg, danger){
   return new Promise(res=>{
     openSheet(`<h3>${lang?'Confirm':'تأكيد'}</h3>
@@ -5832,7 +5857,7 @@ function openLogin(){
     <div class="f ltr"><label for="ph">${T('phone')}</label>
       <input id="ph" type="email" inputmode="email" placeholder="name@example.com" autocomplete="email"></div>
     <div class="actions" style="margin-bottom:6px">
-      <button class="btn p" style="flex:1;justify-content:center" onclick="sendCode()">${T('sendCode')}</button>
+      <button class="btn p" id="sendBtn" style="flex:1;justify-content:center" onclick="sendCode()">${T('sendCode')}</button>
       <button class="btn" onclick="closeSheet()">${T('cancel')}</button>
     </div>`);
   setTimeout(()=>{ const e = document.getElementById('ph'); if(e) e.focus(); }, 260);
@@ -5842,6 +5867,7 @@ async function sendCode(){
   if(!emailOK(v)){ toast(T('wrongEmail')); return; }
   adminEmail = String(v).trim().toLowerCase();
   if(WORKER_URL){
+    btnBusy('sendBtn', true, T('sending'));
     try{
       const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/send', {
         method:'POST', headers:{'content-type':'application/json'},
@@ -5854,12 +5880,13 @@ async function sendCode(){
         <div class="f ltr"><label for="otp">${T('verifyT')}</label>
           <input id="otp" type="tel" inputmode="numeric" maxlength="6" placeholder="······" style="letter-spacing:.4em;text-align:center;font-size:19px"></div>
         <div class="actions" style="margin-bottom:6px">
-          <button class="btn p" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
+          <button class="btn p" id="vBtn" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
           <button class="btn" onclick="openLogin()">${T('resend')}</button>
         </div>`);
       setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
       return;
     }catch(e){
+      btnBusy('sendBtn', false);
       alertModal((lang?'Could not send the code from the server.\n':'تعذّر إرسال الرمز من الخادم.\n')
         + String(e && e.message ? e.message : e)
         + (lang?'\nCheck RESEND_KEY and ALLOWED_ORIGIN in the Worker.':'\nتحقق من RESEND_KEY و ALLOWED_ORIGIN في الـWorker.'));
@@ -5875,7 +5902,7 @@ async function sendCode(){
     <div class="f ltr"><label for="otp">${T('verifyT')}</label>
       <input id="otp" type="tel" inputmode="numeric" maxlength="6" placeholder="······" style="letter-spacing:.4em;text-align:center;font-size:19px"></div>
     <div class="actions" style="margin-bottom:6px">
-      <button class="btn p" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
+      <button class="btn p" id="vBtn" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
       <button class="btn" onclick="openLogin()">${T('resend')}</button>
     </div>`);
   setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
@@ -5883,17 +5910,18 @@ async function sendCode(){
 async function verifyCode(){
   const c = digits(val('otp'));
   if(WORKER_URL && !pendingCode){
+    btnBusy('vBtn', true, T('checking'));
     try{
       const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/verify', {
         method:'POST', headers:{'content-type':'application/json'},
         body: JSON.stringify({phone: adminEmail, code: c})
       }).then(x=>x.json());
-      if(!r.ok){ toast(T('wrongCode')); return; }
+      if(!r.ok){ btnBusy('vBtn', false); toast(T('wrongCode')); return; }
       admin = true;
       await store.set('qcd_admin', {at:Date.now(), email:adminEmail, token:r.token});
       closeSheet(); go('#/account'); render(); toast(lang?'Signed in':T('welcome'));
       return;
-    }catch(e){ toast(T('mailFail')); return; }
+    }catch(e){ btnBusy('vBtn', false); toast(T('mailFail')); return; }
   }
   if(!pendingCode || Date.now() > pendingUntil){ toast(lang?'Code expired.':'انتهت صلاحية الرمز.'); return; }
   if(c !== pendingCode){ toast(T('wrongCode')); return; }
@@ -5907,6 +5935,52 @@ async function signOut(){
   admin = false; editMode = false;
   await store.del('qcd_admin'); await store.set('qcd_edit', false);
   render(); toast(T('signout'));
+}
+
+/* ---------- المزامنة مع الخادم ---------- */
+async function pullRemote(silent){
+  if(!WORKER_URL) return;
+  try{
+    const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/data', {cache:'no-store'}).then(x=>x.json());
+    if(!r || !r.ok || !r.data || !r.data.vehicles) return;
+    const remoteAt = Number(r.updated) || 0;
+    const localAt  = Number(await store.get('qcd_synced')) || 0;
+    if(remoteAt <= localAt) return;
+    DB = applyDocEn(applyDoc(r.data));
+    if(!DB.notices) DB.notices = [];
+    if(r.images) for(const k in r.images) await setImage(k, r.images[k]);
+    await save();
+    await store.set('qcd_synced', remoteAt);
+    render(); updateBadge();
+    if(!silent) toast(T('pulled'));
+    else pushLocal(lang?'Fleet updated':'تحديث الأسطول', T('pulled'));
+  }catch(e){}
+}
+
+async function publishData(){
+  if(!admin){ toast(T('needLogin')); return; }
+  const sa = await store.get('qcd_admin');
+  const token = sa && sa.token;
+  if(!WORKER_URL || !token){
+    alertModal(lang ? 'Publishing needs the Worker and a signed-in session.'
+                    : 'النشر يحتاج ربط الـWorker وتسجيل دخول جديد بالبريد.');
+    return;
+  }
+  btnBusy('pubBtn', true, T('publishing'));
+  try{
+    const r = await fetch(WORKER_URL.replace(/\/$/,'') + '/publish', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({token, data: DB, images: IMGS})
+    });
+    const j = await r.json().catch(()=>({}));
+    btnBusy('pubBtn', false);
+    if(!r.ok || !j.ok){ alertModal((lang?'Publish failed: ':'فشل النشر: ') + (j.error || r.status)); return; }
+    await store.set('qcd_synced', j.updated || Date.now());
+    toast(T('publishOk'));
+  }catch(e){
+    btnBusy('pubBtn', false);
+    alertModal((lang?'Publish failed: ':'فشل النشر: ') + String(e.message || e));
+  }
 }
 
 /* ---------- الإشعارات ---------- */
@@ -6053,7 +6127,12 @@ function showUpdateBar(reg){
   };
 }
 if('serviceWorker' in navigator && location.protocol==='https:'){
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').then(reg=>{
+  let swReloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(swReloaded) return; swReloaded = true;
+    location.reload();
+  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'}).then(reg=>{
     if(!reg) return;
     if(reg.waiting) showUpdateBar(reg);
     reg.addEventListener('updatefound', () => {
@@ -6062,7 +6141,11 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
         if(nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateBar(reg);
       });
     });
-    setInterval(()=>reg.update().catch(()=>{}), 60*60*1000);
+    reg.update().catch(()=>{});
+    setInterval(()=>reg.update().catch(()=>{}), 30*60*1000);
+    document.addEventListener('visibilitychange', () => {
+      if(document.visibilityState === 'visible') reg.update().catch(()=>{});
+    });
   }).catch(()=>{}));
 }
 
@@ -6096,6 +6179,8 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
   else if(sa) await store.del('qcd_admin');
   const se = await store.get('qcd_edit'); if(se && admin) editMode = true;
   READ = (await store.get('qcd_read')) || [];
+  setTimeout(()=>pullRemote(true), 1200);
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') pullRemote(true); });
   if(refreshed) setTimeout(()=>toast(T('updated')), 900);
   if(!DB.notices) DB.notices = [];
   render();

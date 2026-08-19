@@ -1,7 +1,9 @@
 /* أسطول الدفاع المدني — عامل الخدمة
    يحفظ نسخة من التطبيق ليعمل بلا إنترنت داخل المحطة. */
 
-const CACHE = 'qcd-fleet-v1';
+/* BUILD 26 — يتغيّر مع كل نشر ليكتشف المتصفح النسخة الجديدة */
+const BUILD = 27;
+const CACHE = 'qcd-fleet-v' + BUILD;
 
 const SHELL = [
   './',
@@ -60,4 +62,8 @@ self.addEventListener('fetch', e => {
       })
       .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
   );
+});
+
+self.addEventListener('message', e => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });

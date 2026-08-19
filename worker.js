@@ -33,10 +33,38 @@ export default {
     const cors = {
       'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN || '*',
       'Access-Control-Allow-Headers': 'content-type',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'content-type': 'application/json; charset=utf-8'
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+    // فحص الحالة من المتصفح: يوضّح ما إذا كانت الإعدادات مضبوطة دون كشف أي سرّ
+    if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '/status')) {
+      return json({
+        ok: true,
+        service: 'qcd-otp',
+        channel: env.CHANNEL || 'email',
+        kv_bound:      !!env.OTP,
+        resend_key:    !!env.RESEND_KEY,
+        admin_set:     !!env.ADMIN_PHONE,
+        allowed_origin: env.ALLOWED_ORIGIN || '(غير مضبوط)',
+        mail_from:      env.MAIL_FROM || '(الافتراضي)'
+      }, 200, cors);
+    }
+
+    // البيانات المشتركة: يقرأها الجميع
+    if (request.method === 'GET' && url.pathname === '/data') {
+      const raw = await env.OTP.get('fleet');
+      if (!raw) return json({ ok: true, updated: 0, data: null }, 200, cors);
+      const imgRaw = await env.OTP.get('fleet_img');
+      return json({
+        ok: true,
+        updated: Number(await env.OTP.get('fleet_at')) || 0,
+        data: JSON.parse(raw),
+        images: imgRaw ? JSON.parse(imgRaw) : {}
+      }, 200, cors);
+    }
+
     if (request.method !== 'POST')    return json({ ok: false, error: 'method' }, 405, cors);
 
     let body = {};
@@ -46,6 +74,7 @@ export default {
       if (url.pathname === '/send')   return await handleSend(body, env, request, cors);
       if (url.pathname === '/verify') return await handleVerify(body, env, cors);
       if (url.pathname === '/check')  return await handleCheck(body, env, cors);
+      if (url.pathname === '/publish') return await handlePublish(body, env, cors);
     } catch (err) {
       return json({ ok: false, error: 'server' }, 500, cors);
     }
@@ -97,6 +126,21 @@ async function handleVerify(body, env, cors) {
   const token = crypto.randomUUID();
   await env.OTP.put('sess:' + token, phone, { expirationTtl: SESSION_TTL });
   return json({ ok: true, token }, 200, cors);
+}
+
+/** نشر البيانات للجميع — للمدير الموثَّق فقط */
+async function handlePublish(body, env, cors) {
+  const token = String(body.token || '');
+  const phone = token ? await env.OTP.get('sess:' + token) : null;
+  if (!phone) return json({ ok: false, error: 'unauthorised' }, 401, cors);
+  if (!body.data || !body.data.vehicles) return json({ ok: false, error: 'bad_data' }, 400, cors);
+
+  const at = Date.now();
+  await env.OTP.put('fleet', JSON.stringify(body.data));
+  await env.OTP.put('fleet_at', String(at));
+  if (body.images) await env.OTP.put('fleet_img', JSON.stringify(body.images));
+
+  return json({ ok: true, updated: at }, 200, cors);
 }
 
 async function handleCheck(body, env, cors) {
