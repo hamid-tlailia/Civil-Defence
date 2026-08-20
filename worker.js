@@ -30,8 +30,15 @@ const SESSION_TTL = 30 * 24 * 3600;   // صلاحية جلسة المدير: 30 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // يقبل أكثر من نطاق: افصل بينها بفاصلة في ALLOWED_ORIGIN
+    const origin = request.headers.get('Origin') || '';
+    const list = String(env.ALLOWED_ORIGIN || '').split(',').map(x => x.trim()).filter(Boolean);
+    const allowOrigin = (!list.length || list.includes('*')) ? (origin || '*')
+                      : (list.includes(origin) ? origin : list[0]);
+
     const cors = {
-      'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN || '*',
+      'Access-Control-Allow-Origin': allowOrigin,
+      'Vary': 'Origin',
       'Access-Control-Allow-Headers': 'content-type',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'content-type': 'application/json; charset=utf-8'
@@ -48,6 +55,8 @@ export default {
         resend_key:    !!env.RESEND_KEY,
         admin_set:     !!env.ADMIN_PHONE,
         allowed_origin: env.ALLOWED_ORIGIN || '(غير مضبوط)',
+        request_origin: origin || '(بلا Origin — فتح مباشر من المتصفح)',
+        origin_allowed: !list.length || list.includes('*') || list.includes(origin),
         mail_from:      env.MAIL_FROM || '(الافتراضي)'
       }, 200, cors);
     }

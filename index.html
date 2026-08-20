@@ -208,6 +208,7 @@ html[dir="rtl"] .comp.active .chev{transform:scaleX(-1) rotate(90deg)}
   box-shadow:0 2px 0 var(--gold-dk)}
 .navbar button:disabled{opacity:.4}
 .navbar svg{width:15px;height:15px}
+html[dir="rtl"] .navbar svg{transform:scaleX(-1)}
 
 /* ===== بحث ===== */
 .searchbar{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);
@@ -472,7 +473,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 29;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 30;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -810,8 +811,10 @@ function seed(){
 
   return {
     version:DATA_VERSION, updated:Date.now(),
-    notices:[{id:uid('n'), at:Date.now(), title:'مرحبًا بكم في تطبيق الأسطول',
-      body:'هذا التطبيق مرجع تدريبي لأفراد الدفاع المدني الجدد: كل سيارة، وكل خانة فيها، وكل معدة مع استعمالاتها وطريقة استعمالها ومخاطرها.\nاعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.'}],
+    notices:[{id:uid('n'), at:Date.now(),
+      title:{ar:'مرحبًا بكم في تطبيق الأسطول', en:'Welcome to the Fleet app'},
+      body:{ar:'هذا التطبيق مرجع تدريبي لأفراد الدفاع المدني الجدد: كل سيارة، وكل خانة فيها، وكل معدة مع استعمالاتها وطريقة استعمالها ومخاطرها.\nاعتمد دائمًا دليل الشركة المصنّعة والتعليمات الرسمية.',
+            en:'A training reference for new civil defence personnel: every appliance, every compartment, and every item with its uses, handling steps and hazards.\nAlways follow the manufacturer manual and official procedures.'}}],
     vehicles:[
       { id:'riv', code:'RIV 11904', maker:'Ford', name:{ar:'التدخل السريع',en:'Rapid Intervention Vehicle'},
         note:{ar:'أول مركبة تصل للحادث. سرعة الوصول ومعدات القص والفتح أهم من كمية الماء.',en:'First on scene: speed and cutting tools matter more than water volume.'},
@@ -2115,7 +2118,7 @@ function seed(){
               '', 'أنبوب سحب يدوي يبدأ تدفق السائل بفارق الارتفاع بعد شفط أولي.')
           ]),
 
-          C(1,'الخانة الخلفية جهة اليمين','Rear right compartment','bay','يمين',[
+          C(2,'الخانة الخلفية جهة اليمين','Rear right compartment','bay','يمين',[
             I('قاذف ماء','Water branch / nozzle',2,'خراطيم','',
               'التحكم في شكل الماء الخارج: رذاذ واسع للحماية ومستقيم للاختراق والمدى',
               'ابدأ دائمًا بوضعية الرذاذ للحماية\nحرّك الطوق لضبط الزاوية حسب المسافة\nافتح ببطء وأغلق ببطء\nامسك بمسكة ثابتة وقدم للأمام',
@@ -2179,7 +2182,7 @@ function seed(){
               '', 'أحزمة قماشية بمشابك تثبّت لفة الخرطوم وتسهّل حملها.')
           ]),
 
-          C(2,'الخانة الخلفية جهة اليسار','Rear left compartment','bay','يسار',[
+          C(1,'الخانة الخلفية جهة اليسار','Rear left compartment','bay','يسار',[
             I('خرطوم حريق 45 مم','Attack hose 45 mm',5,'خراطيم','',
               'خط الهجوم الأساسي للحرائق الصغيرة والمتوسطة والتبريد',
               'افرد الخط بعيدًا عن الالتواءات\nركّب القارنة على القاذف حتى التعشيق\nافتح المحبس تدريجيًا',
@@ -5232,6 +5235,7 @@ function renderResults(){
   box.innerHTML = n ? out : `<div class="empty"><b>${T('noRes')}</b>${T('noResS')}</div>`;
 }
 
+const nt = v => (v && typeof v === 'object') ? (v[lang?'en':'ar'] || v.ar || v.en || '') : String(v||'');
 function fmtDate(d){
   const p = n => String(n).padStart(2,'0');
   return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`;
@@ -5246,7 +5250,7 @@ function viewNotices(){
     const isNew = !READ.includes(n.id);
     const d = new Date(n.at);
     h += `<div class="notice ${isNew?'new':''}">
-      <h4>${esc(n.title)}</h4><p>${esc(n.body)}</p>
+      <h4>${esc(nt(n.title))}</h4><p>${esc(nt(n.body))}</p>
       <time>${fmtDate(d)}</time>
       ${admin?`<div class="actions" style="margin-top:10px"><button class="btn d" onclick="delNotice('${n.id}')">${T('del')}</button></div>`:''}
     </div>`;
@@ -5656,6 +5660,20 @@ function btnBusy(id, on, label){
   else { b.disabled = false; b.style.opacity = ''; if(b.dataset.old) b.innerHTML = b.dataset.old; }
 }
 
+function loginError(e){
+  const m = String((e && e.message) || e || '');
+  const code = (m.match(/\b(\d{3})\b/) || [])[1];
+  if(code === '429') return lang ? 'A code was just sent. Please wait a minute before trying again.'
+                                 : 'أُرسل رمز قبل قليل. انتظر دقيقة ثم أعد المحاولة.';
+  if(code === '401' || code === '403') return lang ? 'This email is not authorised to sign in.'
+                                                   : 'هذا البريد غير مصرّح له بالدخول.';
+  if(code === '500' || code === '502' || code === '503')
+    return lang ? 'The service is unavailable right now. Please try again shortly.'
+                : 'الخدمة غير متاحة حاليًا. حاول بعد قليل.';
+  return lang ? 'Could not send the code. Check your internet connection and try again.'
+              : 'تعذّر إرسال الرمز. تأكد من اتصالك بالإنترنت ثم حاول مرة أخرى.';
+}
+
 function askConfirm(msg, danger){
   return new Promise(res=>{
     openSheet(`<h3>${lang?'Confirm':'تأكيد'}</h3>
@@ -5681,7 +5699,12 @@ function alertModal(msg){
       <button class="btn p blk" onclick="closeSheet()">${lang?'OK':'حسنًا'}</button></div>`);
 }
 
-function openSheet(html){ $('#sheet').innerHTML = `<div class="grab"></div>`+html; $('#sheet').classList.add('on'); $('#scrim').classList.add('on'); }
+function openSheet(html, locked){
+  $('#sheet').innerHTML = (locked ? '' : `<div class="grab"></div>`) + html;
+  $('#sheet').classList.add('on'); $('#scrim').classList.add('on');
+  const sc = $('#scrim');
+  if(sc) sc.onclick = locked ? null : closeSheet;
+}
 function closeSheet(){
   const sc = document.getElementById('scrim'); if(sc) sc.onclick = closeSheet; $('#sheet').classList.remove('on'); $('#scrim').classList.remove('on'); }
 const val = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
@@ -5882,7 +5905,7 @@ function openLogin(){
     <div class="actions" style="margin-bottom:6px">
       <button class="btn p" id="sendBtn" style="flex:1;justify-content:center" onclick="sendCode()">${T('sendCode')}</button>
       <button class="btn" onclick="closeSheet()">${T('cancel')}</button>
-    </div>`);
+    </div>`, true);
   setTimeout(()=>{ const e = document.getElementById('ph'); if(e) e.focus(); }, 260);
 }
 async function sendCode(){
@@ -5905,14 +5928,13 @@ async function sendCode(){
         <div class="actions" style="margin-bottom:6px">
           <button class="btn p" id="vBtn" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
           <button class="btn" onclick="openLogin()">${T('resend')}</button>
-        </div>`);
+          <button class="btn" onclick="closeSheet()">${T('cancel')}</button>
+        </div>`, true);
       setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
       return;
     }catch(e){
       btnBusy('sendBtn', false);
-      alertModal((lang?'Could not send the code from the server.\n':'تعذّر إرسال الرمز من الخادم.\n')
-        + String(e && e.message ? e.message : e)
-        + (lang?'\nCheck RESEND_KEY and ALLOWED_ORIGIN in the Worker.':'\nتحقق من RESEND_KEY و ALLOWED_ORIGIN في الـWorker.'));
+      alertModal(loginError(e));
       return;
     }
   }
@@ -5927,7 +5949,8 @@ async function sendCode(){
     <div class="actions" style="margin-bottom:6px">
       <button class="btn p" id="vBtn" style="flex:1;justify-content:center" onclick="verifyCode()">${T('verify')}</button>
       <button class="btn" onclick="openLogin()">${T('resend')}</button>
-    </div>`);
+      <button class="btn" onclick="closeSheet()">${T('cancel')}</button>
+    </div>`, true);
   setTimeout(()=>{ const e = document.getElementById('otp'); if(e) e.focus(); }, 260);
 }
 async function verifyCode(){
@@ -6067,7 +6090,7 @@ async function publishNotice(){
   READ = READ.concat([n.id]);
   await store.set('qcd_read', READ);
   await save(); closeSheet(); go('#/notices'); render();
-  pushLocal(n.title, n.body);
+  pushLocal(nt(n.title), nt(n.body));
   toast(T('published'));
 }
 async function delNotice(id){
@@ -6228,9 +6251,11 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
     if((saved.version || 0) < DATA_VERSION){
       const keep = saved.notices || [];
       DB = applyDocEn(applyDoc(seed()));
-      DB.notices = keep.concat(DB.notices.filter(n=>!keep.some(k=>k.title===n.title)));
-      DB.notices.push({id:uid('n'), at:Date.now(), title:'تم تحديث بيانات التطبيق',
-        body:'وصلتك أحدث نسخة من بيانات الأسطول والمعدات. صورك ومعلوماتك المحفوظة على الجهاز لم تتأثر.'});
+      DB.notices = keep.concat(DB.notices.filter(n=>!keep.some(k=>nt(k.title)===nt(n.title))));
+      DB.notices.push({id:uid('n'), at:Date.now(),
+        title:{ar:'تم تحديث بيانات التطبيق', en:'App data updated'},
+        body:{ar:'وصلتك أحدث نسخة من بيانات الأسطول والمعدات. صورك ومعلوماتك المحفوظة على الجهاز لم تتأثر.',
+              en:'You now have the latest fleet and equipment data. Your photos and local entries are untouched.'}});
       await save(); refreshed = true;
     } else DB = saved;
   } else await save();
