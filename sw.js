@@ -11,6 +11,8 @@ const SHELL = [
   './manifest.json',
   './logo.png',
   './icon-192.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
   './icon-512.png'
 ];
 

@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>الدفاع المدني — دولة قطر</title>
 <link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -155,7 +155,7 @@ html[dir="rtl"] .comp.active .chev{transform:scaleX(-1) rotate(90deg)}
 .item{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);
   padding:9px;text-align:center;display:flex;flex-direction:column;transition:.15s}
 .item:active{transform:scale(.98)}
-.item .ph{height:82px;border-radius:10px;background:#F7F3ED center/cover no-repeat;display:grid;place-items:center;
+.item .ph{height:92px;border-radius:10px;background:#F7F3ED center/contain no-repeat;display:grid;place-items:center;
   margin-bottom:8px;border:1px solid var(--line2)}
 .item .ph svg{width:30px;height:30px;color:#C9BCAC}
 .item b{display:block;font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink);line-height:1.4}
@@ -172,7 +172,7 @@ html[dir="rtl"] .comp.active .chev{transform:scaleX(-1) rotate(90deg)}
   overflow:hidden;margin-bottom:14px}
 .hero .cv{height:6px;background:var(--chevron)}
 .hero .shot{background:#F7F3ED;border-bottom:1px solid var(--line2)}
-.hero .shot img{display:block;width:100%;max-height:270px;object-fit:contain}
+.hero .shot img{display:block;width:100%;height:250px;object-fit:contain;padding:8px}
 .hero .noshot{height:150px;display:grid;place-items:center;background:#F7F3ED;border-bottom:1px solid var(--line2)}
 .hero .noshot svg{width:46px;height:46px;color:#CFC2B2}
 .hero .in{padding:14px 15px 16px;text-align:center}
@@ -254,7 +254,7 @@ html[dir="rtl"] .back svg{transform:scaleX(-1)}
 .f .hint{font-size:11px;color:var(--muted);margin-top:4px}
 .f.ltr input,.f.ltr textarea{direction:ltr;text-align:start;font-family:var(--mono);font-size:13.5px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.prev{height:150px;border-radius:12px;border:2px dashed var(--line);background:#FBF8F4 center/cover no-repeat;
+.prev{height:150px;border-radius:12px;border:2px dashed var(--line);background:#FBF8F4 center/contain no-repeat;
   display:grid;place-items:center;color:var(--muted);font-size:12px;margin-bottom:8px}
 .prev.has{border-style:solid}
 .prev i{font-style:normal;background:rgba(255,255,255,.8);padding:5px 12px;border-radius:999px}
@@ -472,7 +472,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 28;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 29;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
