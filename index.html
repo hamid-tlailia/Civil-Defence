@@ -80,15 +80,14 @@ h2{font-family:var(--display);font-weight:700;font-size:17px;margin:0 0 8px;colo
   box-shadow:var(--sh);transition:.16s;text-align:start;color:var(--ink);display:block;width:100%}
 .vcard .lbl b,.vcard .lbl span{color:#2E2200}
 .vcard:active{transform:scale(.98)}
-.vcard .pic{background:linear-gradient(180deg,#fbf8f3,#f1ebe2);padding:10px 8px 6px;border-bottom:1px solid var(--line2);
-  display:grid;place-items:center;min-height:118px}
-.carimg{width:100%;height:104px;object-fit:contain;display:block;
-  filter:drop-shadow(0 3px 5px rgba(0,0,0,.22))}
-.carhero{background:linear-gradient(180deg,#fbf8f3,#EFE9E0);border:1px solid var(--line);
-  border-radius:var(--r);box-shadow:var(--sh);padding:12px;margin-bottom:14px}
-.carhero img{width:100%;height:190px;object-fit:contain;display:block;
-  filter:drop-shadow(0 4px 7px rgba(0,0,0,.25))}
-html[data-theme="dark"] .carhero{background:linear-gradient(180deg,#EFE9E0,#D9D1C6);border-color:#3E342B}
+.vcard .pic{background:none;padding:8px 8px 4px;border-bottom:0;display:grid;place-items:center}
+.carimg{width:100%;height:118px;object-fit:cover;display:block;border-radius:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.carhero{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh);padding:8px;margin-bottom:14px}
+.carhero img{width:100%;height:200px;object-fit:cover;display:block;border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.2)}
+html[data-theme="dark"] .carhero{background:#241F1A;border-color:#3E342B}
 .vcard .lbl{background:var(--card);border-top:2px solid var(--gold);padding:9px 10px 11px;text-align:center}
 .vcard .lbl b{display:block;font-family:var(--display);font-weight:900;font-size:14.5px;color:var(--ink);line-height:1.35}
 .vcard .lbl span{display:block;font-size:11.5px;font-weight:600;color:var(--red);margin-top:3px}
@@ -481,7 +480,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 31;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 32;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
