@@ -480,7 +480,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 46;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 47;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -4830,6 +4830,11 @@ function applyRapidInterventionImages(){
     if(src && !IMGS[it.id]) IMGS[it.id] = src;
   });
 }
+// يعيد الصورة المرفوعة أولًا، ثم الصورة الافتراضية للمعدات كي لا تبقى البطاقة فارغة.
+function imageForItem(v,it){
+  if(IMGS[it.id]) return IMGS[it.id];
+  return v && v.id==='riv' ? (RIV_EQUIPMENT_IMAGES[it.name && it.name.ar] || '') : '';
+}
 let editMode = false;
 let admin = false;
 let pendingCode = null, pendingUntil = 0;
@@ -5133,7 +5138,7 @@ function viewComp(vid,cid){
   if(c.items.length){
     h += `<div class="igrid">`;
     c.items.forEach(it=>{
-      const im = IMGS[it.id];
+      const im = imageForItem(v,it);
       const line = (lines(t(it.def||{}))[0]) || (lines(t(it.uses))[0]) || catT(it.cat) || '';
       h += `<button class="item" onclick="go('#/e/${v.id}/${c.id}/${it.id}')">
         <span class="ph" ${im?`style="background-image:url('${im}')"`:''}>${im?'':itemIcon(it.cat)}</span>
@@ -5169,7 +5174,7 @@ function compHTML(v,c,active){
   if(c.items.length){
     h += `<div class="igrid">`;
     c.items.forEach(it=>{
-      const im = IMGS[it.id];
+      const im = imageForItem(v,it);
       const line = (lines(t(it.def||{}))[0]) || (lines(t(it.uses))[0]) || catT(it.cat) || '';
       h += `<button class="item" onclick="go('#/e/${v.id}/${c.id}/${it.id}')">
         <span class="ph" ${im?`style="background-image:url('${im}')"`:''}>${im?'':itemIcon(it.cat)}</span>
@@ -5241,7 +5246,7 @@ function viewItem(vid,cid,iid){
     else inner = L.length===1 ? `<p style="margin:0">${esc(L[0])}</p>` : `<ul>${L.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
     return `<div class="row ${kind==='danger'?'danger':''}"><span class="lab">${label}</span><span class="val">${inner}</span></div>`;
   };
-  const im = IMGS[it.id];
+  const im = imageForItem(v,it);
   const idx = c.items.findIndex(x=>x.id===iid);
   const prev = idx>0 ? c.items[idx-1] : null;
   const next = idx < c.items.length-1 ? c.items[idx+1] : null;
