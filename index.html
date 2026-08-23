@@ -480,7 +480,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 45;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 46;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -4793,6 +4793,43 @@ function applyDoc(db){
 
 let DB = applyDocEn(applyDoc(seed()));
 let IMGS = {};
+// صور افتراضية لبطاقات معدات التدخل السريع؛ الصورة التي يرفعها المستخدم تبقى لها الأولوية.
+const RIV_EQUIPMENT_IMAGES = {
+  'جاكيت تحذيري فسفوري (شياحة)':'./assets/riv-equipment/vest.webp',
+  'حبل إنقاذ مع كيس الحمل':'./assets/riv-equipment/rope.webp',
+  'أغطية ألمنيوم':'./assets/riv-equipment/cover.webp',
+  'شنكل رفع قوة 1.6 طن':'./assets/riv-equipment/shackle.webp',
+  'شنكل رفع قوة 3.15 طن':'./assets/riv-equipment/shackle.webp',
+  'معدة مسك الثعابين (عصا)':'./assets/riv-equipment/snake-pole.webp',
+  'صندوق معدات كهربائية':'./assets/riv-equipment/tool-kit.webp',
+  'ماكينة جلخ مع ملحقاتها':'./assets/riv-equipment/grinder.webp',
+  'شاحن بطارية الجلخ':'./assets/riv-equipment/grinder.webp',
+  'بطارية ماكينة الجلخ':'./assets/riv-equipment/grinder.webp',
+  'أسطوانة قطع الحديد (شفرة) 125 مم':'./assets/riv-equipment/cutting-disc.webp',
+  'أسطوانة قطع الحديد (شفرة)':'./assets/riv-equipment/cutting-disc.webp',
+  'جهاز قطع الخواتم وملحقاته':'./assets/riv-equipment/rescue-tool.webp',
+  'طفاية ثاني أكسيد الكربون':'./assets/riv-equipment/co2-extinguisher.webp',
+  'طفاية بودرة':'./assets/riv-equipment/powder-extinguisher.webp',
+  'مقص براغي طويل 620 مم':'./assets/riv-equipment/rescue-tool.webp',
+  'مضخة كهربائية لتعبئة الفوم':'./assets/riv-equipment/foam-pump.webp',
+  'خرطوم تعبئة الفوم':'./assets/riv-equipment/foam-pump.webp',
+  'عصا إنقاذ متعددة الاستخدامات':'./assets/riv-equipment/snake-pole.webp',
+  'جهاز تحكم لتسجيل دخول الأفراد مع الإشارة':'./assets/riv-equipment/tool-kit.webp',
+  'معدة فتح أبواب السيارات':'./assets/riv-equipment/rescue-tool.webp',
+  'بلك شحن بطارية السيارة':'./assets/riv-equipment/grinder.webp',
+  'شنطة معدات متعددة الاستخدامات':'./assets/riv-equipment/tool-kit.webp',
+  'منشار قطع الزجاج مع قلم كسر الزجاج':'./assets/riv-equipment/rescue-tool.webp',
+  'مولد الكهرباء':'./assets/riv-equipment/generator.webp'
+};
+function applyRapidInterventionImages(){
+  const riv = DB && DB.vehicles && DB.vehicles.find(v=>v.id==='riv');
+  const bay = riv && riv.compartments.find(c=>c.no===1 && c.side==='يسار');
+  if(!bay) return;
+  bay.items.forEach(it=>{
+    const src = RIV_EQUIPMENT_IMAGES[it.name && it.name.ar];
+    if(src && !IMGS[it.id]) IMGS[it.id] = src;
+  });
+}
 let editMode = false;
 let admin = false;
 let pendingCode = null, pendingUntil = 0;
@@ -6296,6 +6333,7 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
       await save(); refreshed = true;
     } else DB = saved;
   } else await save();
+  applyRapidInterventionImages();
   const sl = await store.get('qcd_lang'); if(sl===1) toggleLang();
   const th = await store.get('qcd_theme');
   if(th === 'dark' || (!th && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) theme = 'dark';
