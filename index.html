@@ -480,7 +480,7 @@ html[data-theme="dark"] .hero .en{color:#A99C90}
    1. التخزين — يعمل داخل Claude وخارجه (استضافة عادية)
    ========================================================= */
 const KEY = 'qcd_fleet';
-const DATA_VERSION = 34;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
+const DATA_VERSION = 35;   // ارفعه رقمًا واحدًا مع كل نشر جديد لتصل البيانات لكل الأجهزة
 const IMGK = 'qcdimg:';
 const store = {
   async get(k){
@@ -4901,10 +4901,21 @@ function silhouette(v){
   return s + `</svg>`;
 }
 
+// توزيع الخانات الفعلي: الإنقاذ والإطفاء الكبير لهما خانتان بكل جهة.
+const SIDE_BAY_LAYOUTS = {
+  rescue: {يسار:[1,3], يمين:[2,4]},
+  sky:    {يسار:[1,3], يمين:[2,4]}
+};
+function sideBays(v,side){
+  const bays = v.compartments.filter(c=>c.kind==='bay' && (c.side||'يمين')===side);
+  const order = (SIDE_BAY_LAYOUTS[v.id] || {})[side];
+  return order ? order.map(no=>bays.find(c=>Number(c.no)===no)).filter(Boolean)
+               : bays.sort((a,b)=>Number(a.no)-Number(b.no));
+}
 function elevation(v,{side='يمين', activeId=null, all=false}={}){
   const cabs = v.compartments.filter(c=>c.kind==='cab');
   const bays = all ? v.compartments.filter(c=>c.kind==='bay')
-                   : v.compartments.filter(c=>c.kind==='bay' && (c.side||'يمين')===side);
+                   : sideBays(v,side);
   const flip = !all && side==='يسار';          // من الجهة اليسرى تكون المقدمة إلى اليمين
   const uidg = v.id + (all?'A':(flip?'R':'L'));
   const BW = 78, GAP = 7, PAD = 14;
@@ -5062,13 +5073,6 @@ const CARVIEWS = {
   patrol: {full:'./cars/mockups/patrol/full.webp',    right:'./cars/mockups/patrol/right.webp',    left:'./cars/mockups/patrol/left.webp'}
 };
 const carPic = v => (CARVIEWS[v.id] || {}).full || '';
-const compPic = (v,c) => {
-  const views = CARVIEWS[v.id];
-  if(!views) return '';
-  if(c && c.side==='يمين') return views.right;
-  if(c && c.side==='يسار') return views.left;
-  return views.full;
-};
 
 const PHIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg>';
 
@@ -5091,7 +5095,7 @@ function viewComp(vid,cid){
   if(c.items.length){
     h += `<div class="igrid">`;
     c.items.forEach(it=>{
-      const im = compPic(v,c) || IMGS[it.id];
+      const im = IMGS[it.id];
       const line = (lines(t(it.def||{}))[0]) || (lines(t(it.uses))[0]) || catT(it.cat) || '';
       h += `<button class="item" onclick="go('#/e/${v.id}/${c.id}/${it.id}')">
         <span class="ph" ${im?`style="background-image:url('${im}')"`:''}>${im?'':itemIcon(it.cat)}</span>
@@ -5127,7 +5131,7 @@ function compHTML(v,c,active){
   if(c.items.length){
     h += `<div class="igrid">`;
     c.items.forEach(it=>{
-      const im = compPic(v,c) || IMGS[it.id];
+      const im = IMGS[it.id];
       const line = (lines(t(it.def||{}))[0]) || (lines(t(it.uses))[0]) || catT(it.cat) || '';
       h += `<button class="item" onclick="go('#/e/${v.id}/${c.id}/${it.id}')">
         <span class="ph" ${im?`style="background-image:url('${im}')"`:''}>${im?'':itemIcon(it.cat)}</span>
@@ -5152,8 +5156,8 @@ function compHTML(v,c,active){
 function viewVehicle(id){
   const v = findV(id); if(!v) return viewFleet();
   const active = openComp && findC(v,openComp) ? openComp : null;
-  const L = v.compartments.filter(c=>isSideBay(c) && c.side==='يسار').sort((a,b)=>a.no-b.no);
-  const R = v.compartments.filter(c=>isSideBay(c) && c.side==='يمين').sort((a,b)=>a.no-b.no);
+  const L = sideBays(v,'يسار');
+  const R = sideBays(v,'يمين');
   const cabs = v.compartments.filter(c=>c.kind==='cab');
   const X = extraComps(v);
 
@@ -5163,6 +5167,12 @@ function viewVehicle(id){
   h += `<h1>${esc(t(v.name))}</h1>
   <p class="sub">${esc(v.maker)}</p>`;
 
+  if(v.specs && v.specs.length){
+    h += `<div class="eyebrow">${T('specsT')}</div><div class="specs" style="margin-top:0">`;
+    v.specs.filter(x=>t(x.k)!=='رقم اللوحة' && t(x.k)!=='Plate no.').forEach(x=>{ h += `<div class="spec"><b>${esc(t(x.k))}</b><i>${esc(t(x.v))}</i></div>`; });
+    h += `</div>`;
+  }
+
   if(L.length) h += `<div class="eyebrow">${T('leftS')}</div>
       <div class="draw">${elevation(v,{side:'يسار'})}</div>` + L.map(c=>compRow(v,c)).join('');
   if(R.length) h += `<div class="eyebrow">${T('rightS')}</div>
@@ -5170,11 +5180,6 @@ function viewVehicle(id){
   if(cabs.length) h += `<div class="eyebrow">${T('cabsC')}</div>` + cabs.map(c=>compRow(v,c)).join('');
   if(X.length) h += `<div class="eyebrow">${T('sideO')}</div>` + X.map(c=>compRow(v,c)).join('');
 
-  if(v.specs && v.specs.length){
-    h += `<div class="eyebrow">${T('specsT')}</div><div class="specs" style="margin-top:0">`;
-    v.specs.filter(x=>t(x.k)!=='رقم اللوحة' && t(x.k)!=='Plate no.').forEach(x=>{ h += `<div class="spec"><b>${esc(t(x.k))}</b><i>${esc(t(x.v))}</i></div>`; });
-    h += `</div>`;
-  }
   if(t(v.note)) h += `<p class="sub" style="margin-top:14px">${esc(t(v.note))}</p>`;
   if(admin && editMode){
     h += `<div class="actions">
