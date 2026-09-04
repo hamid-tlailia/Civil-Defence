@@ -4793,8 +4793,8 @@ function applyDoc(db){
 
 let DB = applyDocEn(applyDoc(seed()));
 let IMGS = {};
-// صور افتراضية لبطاقات معدات التدخل السريع؛ الصورة التي يرفعها المستخدم تبقى لها الأولوية.
-const RIV_EQUIPMENT_IMAGES = {
+// صور حقيقية افتراضية للمعدات، تُطبَّق على أي معدة بنفس الاسم في أي مركبة؛ الصورة التي يرفعها المستخدم تبقى لها الأولوية.
+const EQUIPMENT_IMAGES = {
   'جاكيت تحذيري فسفوري (شياحة)':'./assets/riv-equipment/vest.webp',
   'حبل إنقاذ مع كيس الحمل':'./assets/riv-equipment/rope.webp',
   'أغطية ألمنيوم':'./assets/riv-equipment/cover.webp',
@@ -4821,19 +4821,21 @@ const RIV_EQUIPMENT_IMAGES = {
   'منشار قطع الزجاج مع قلم كسر الزجاج':'./assets/riv-equipment/rescue-tool.webp',
   'مولد الكهرباء':'./assets/riv-equipment/generator.webp'
 };
-function applyRapidInterventionImages(){
-  const riv = DB && DB.vehicles && DB.vehicles.find(v=>v.id==='riv');
-  const bay = riv && riv.compartments.find(c=>c.no===1 && c.side==='يسار');
-  if(!bay) return;
-  bay.items.forEach(it=>{
-    const src = RIV_EQUIPMENT_IMAGES[it.name && it.name.ar];
-    if(src && !IMGS[it.id]) IMGS[it.id] = src;
+function applyDefaultEquipmentImages(){
+  if(!DB || !DB.vehicles) return;
+  DB.vehicles.forEach(v=>{
+    (v.compartments||[]).forEach(c=>{
+      (c.items||[]).forEach(it=>{
+        const src = EQUIPMENT_IMAGES[it.name && it.name.ar];
+        if(src && !IMGS[it.id]) IMGS[it.id] = src;
+      });
+    });
   });
 }
-// يعيد الصورة المرفوعة أولًا، ثم الصورة الافتراضية للمعدات كي لا تبقى البطاقة فارغة.
+// يعيد الصورة المرفوعة أولًا، ثم الصورة الحقيقية الافتراضية لنفس المعدة كي لا تبقى البطاقة فارغة.
 function imageForItem(v,it){
   if(IMGS[it.id]) return IMGS[it.id];
-  return v && v.id==='riv' ? (RIV_EQUIPMENT_IMAGES[it.name && it.name.ar] || '') : '';
+  return EQUIPMENT_IMAGES[it.name && it.name.ar] || '';
 }
 let editMode = false;
 let admin = false;
@@ -6338,7 +6340,7 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
       await save(); refreshed = true;
     } else DB = saved;
   } else await save();
-  applyRapidInterventionImages();
+  applyDefaultEquipmentImages();
   const sl = await store.get('qcd_lang'); if(sl===1) toggleLang();
   const th = await store.get('qcd_theme');
   if(th === 'dark' || (!th && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) theme = 'dark';
